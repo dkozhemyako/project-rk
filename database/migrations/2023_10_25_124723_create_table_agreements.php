@@ -34,14 +34,14 @@ return new class extends Migration
             $table->string('equip_street', 50);
             $table->string('equip_house');
             $table->text('equip_address_add');
-            $table->string('file_fop_edr', 100)->nullable();
-            $table->string('file_fop_agr_rent', 100)->nullable();
-            $table->string('file_fo_pas1st', 100)->nullable();
-            $table->string('file_fo_pas2nd', 100)->nullable();
-            $table->string('file_fo_pasReg', 100)->nullable();
-            $table->string('file_fo_agr_rent', 100)->nullable();
-            $table->string('file_draft_agreement', 100)->nullable();
-            $table->string('file_signed_agreement', 100)->nullable();
+            $table->string('file_fop_edr', 250)->nullable();
+            $table->string('file_fop_agr_rent', 250)->nullable();
+            $table->string('file_fo_pas1st', 250)->nullable();
+            $table->string('file_fo_pas2nd', 250)->nullable();
+            $table->string('file_fo_pasReg', 250)->nullable();
+            $table->string('file_fo_agr_rent', 250)->nullable();
+            $table->string('file_draft_agreement', 250)->nullable();
+            $table->string('file_signed_agreement', 250)->nullable();
             $table->bigInteger('telegram_id');
 
         });
