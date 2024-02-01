@@ -26,13 +26,13 @@ class TelegramController extends Controller
     {
 
         Log::info($request);
-        /*
+
         Redis::incr('all_request_calculator30112023');
         $fileName = $this->fileService->getFile($request->all());
         $data = new InboundDTO($request->all(), $fileName);
 
         $this->service->handle($data);
-        */
+
         return '';
 
     }
