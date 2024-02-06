@@ -6,6 +6,7 @@ use App\Enums\TypeClientEnum;
 use App\Services\Telegram\Handlers\AgreementHandler\AgreementInterface;
 use App\Services\Telegram\Handlers\AgreementHandler\DTO\AgreementDTO;
 use Closure;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redis;
 
 class ClientPhoneHandler implements AgreementInterface
@@ -41,10 +42,15 @@ class ClientPhoneHandler implements AgreementInterface
             return $next($agreementDTO);
         }
 
+        Log::info(str_split($agreementDTO->getMessage())[1]);
+        Log::info(str_split($agreementDTO->getMessage())[2]);
+
         if (in_array(str_split($agreementDTO->getMessage())[1] . str_split($agreementDTO->getMessage())[2], $availablePhoneCodes, true) === false){
-            $agreementDTO->setMessage('🤦 Такого коду0636964239 мобільної мережі не зареєстровано за жодним оператором. Повторіть спробу.');
+            $agreementDTO->setMessage('🤦 Такого коду мобільної мережі не зареєстровано за жодним оператором. Повторіть спробу.');
             return $agreementDTO;
         }
+
+
 
         if(strlen($agreementDTO->getMessage()) != 10){
             $agreementDTO->setMessage('🤦 Номер телефону вказано не вірно, необхідно вказати 10 чисел починаючи з 0, наприклад 0631112233');
