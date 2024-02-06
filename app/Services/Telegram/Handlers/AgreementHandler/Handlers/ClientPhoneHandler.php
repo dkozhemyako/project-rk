@@ -42,9 +42,6 @@ class ClientPhoneHandler implements AgreementInterface
             return $next($agreementDTO);
         }
 
-        Log::info(str_split($agreementDTO->getMessage())[1]);
-        Log::info(str_split($agreementDTO->getMessage())[2]);
-
         if (in_array(str_split($agreementDTO->getMessage())[1] . str_split($agreementDTO->getMessage())[2], $availablePhoneCodes, true) === false){
             $agreementDTO->setMessage('🤦 Такого коду мобільної мережі не зареєстровано за жодним оператором. Повторіть спробу.');
             return $agreementDTO;
@@ -67,8 +64,8 @@ class ClientPhoneHandler implements AgreementInterface
             return $agreementDTO;
         }
 
-        if (str_split($agreementDTO->getMessage())[1] == 0 || str_split($agreementDTO->getMessage())[2] == 0){
-            $agreementDTO->setMessage('🤦 Номер телефону вказано не вірно, необхідно вказати 10 чисел починаючи з 0, друге і третє число не може бути нулем, наприклад 0631112233');
+        if (str_split($agreementDTO->getMessage())[1] == 0 ){
+            $agreementDTO->setMessage('🤦 Номер телефону вказано не вірно, необхідно вказати 10 чисел починаючи з 0, друге число не може бути нулем, наприклад 0631112233');
             return $agreementDTO;
         }
 
