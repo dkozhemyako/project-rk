@@ -24,7 +24,7 @@ class TelegramController extends Controller
      */
     public function index(Request $request): string
     {
-
+        Log::info($request);
         $fix = $request->all();
         if (array_key_exists('my_chat_member', $fix)){
             if (array_key_exists('new_chat_member', $fix['my_chat_member'])){
@@ -41,8 +41,6 @@ class TelegramController extends Controller
                 }
             }
         }
-
-        Log::info($request);
 
         Redis::incr('all_request_calculator30112023');
         $fileName = $this->fileService->getFile($request->all());
