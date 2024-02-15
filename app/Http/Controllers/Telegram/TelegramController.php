@@ -26,14 +26,16 @@ class TelegramController extends Controller
     {
 
         $fix = $request->all();
-        if (
-            array_key_exists('type', $fix['my_chat_member']['chat'])
-            &&
-            $fix['my_chat_member']['chat']['type'] === 'group'
-            &&
-            $fix['my_chat_member']['chat']['title'] !== 'admin_servise'
-        ){
-            return '';
+        if (array_key_exists('my_chat_member', $fix)){
+            if (array_key_exists('chat', $fix['my_chat_member'])){
+                if (array_key_exists('type', $fix['chat'])){
+                    if ($fix['my_chat_member']['chat']['type'] === 'group'){
+                        if ($fix['my_chat_member']['chat']['title'] !== 'admin_servise'){
+                            return '';
+                        }
+                    }
+                }
+            }
         }
 
         Log::info($request);
