@@ -33,6 +33,8 @@ class TelegramController extends Controller
                         $fix['my_chat_member']['new_chat_member']['status'] === 'kicked'
                         ||
                         $fix['my_chat_member']['new_chat_member']['status'] === 'member'
+                        ||
+                        $fix['my_chat_member']['new_chat_member']['status'] === 'left'
                     ){
                             return '';
                     }
