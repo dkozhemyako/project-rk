@@ -25,6 +25,17 @@ class TelegramController extends Controller
     public function index(Request $request): string
     {
 
+        $fix = $request->all();
+        if (
+            array_key_exists('type', $fix['my_chat_member']['chat'])
+            &&
+            $fix['my_chat_member']['chat']['type'] === 'group'
+            &&
+            $fix['my_chat_member']['chat']['title'] !== 'admin_servise'
+        ){
+            return '';
+        }
+
         Log::info($request);
 
         Redis::incr('all_request_calculator30112023');
