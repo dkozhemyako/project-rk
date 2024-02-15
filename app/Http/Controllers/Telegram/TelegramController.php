@@ -27,9 +27,9 @@ class TelegramController extends Controller
 
         $fix = $request->all();
         if (array_key_exists('my_chat_member', $fix)){
-            if (array_key_exists('old_chat_member', $fix['my_chat_member'])){
-                if (array_key_exists('user', $fix['my_chat_member']['old_chat_member'])){
-                    if ($fix['my_chat_member']['old_chat_member']['user']['status'] === 'kicked'){
+            if (array_key_exists('new_chat_member', $fix['my_chat_member'])){
+                if (array_key_exists('status', $fix['my_chat_member']['new_chat_member'])){
+                    if ($fix['my_chat_member']['new_chat_member']['status'] === 'kicked'){
                             return '';
                     }
                 }
