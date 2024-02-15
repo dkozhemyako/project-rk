@@ -30,11 +30,11 @@ class TelegramController extends Controller
             if (array_key_exists('new_chat_member', $fix['my_chat_member'])){
                 if (array_key_exists('status', $fix['my_chat_member']['new_chat_member'])){
                     if (
-                        $fix['my_chat_member']['new_chat_member']['status'] === 'kicked'
+                        $fix['my_chat_member']['new_chat_member']['status'] == 'kicked'
                         ||
-                        $fix['my_chat_member']['new_chat_member']['status'] === 'member'
+                        $fix['my_chat_member']['new_chat_member']['status'] == 'member'
                         ||
-                        $fix['my_chat_member']['new_chat_member']['status'] === 'left'
+                        $fix['my_chat_member']['new_chat_member']['status'] == 'left'
                     ){
                             return '';
                     }
