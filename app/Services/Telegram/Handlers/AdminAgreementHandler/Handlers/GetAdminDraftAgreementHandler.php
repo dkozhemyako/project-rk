@@ -59,7 +59,7 @@ class GetAdminDraftAgreementHandler implements AdminAgreementInterface
 
         $clientInfo = $this->clientAgreementRepository->getClientFilesById($adminAgreementDTO->getCallback());
 
-        $newFileName = 'adm_final_' . $adminAgreementDTO->getEquipmentModel().'_'.$clientInfo->getEquipTown().'_'.$clientInfo->getEquipStreet().'_'.$clientInfo->getEquipHouse().'_'. $clientInfo->getName().'_'.$clientInfo->getPhone() . '.docx';
+        $newFileName = $clientInfo->getEquipTown().'_'.$clientInfo->getEquipStreet().'_'.$clientInfo->getEquipHouse().'_'. $clientInfo->getName().'_'.$clientInfo->getPhone() . '.docx';
         Storage::disk('public')->move($adminAgreementDTO->getFileName(), $newFileName);
 
         $this->adminAgreementRepository->updateDraftAgreement($adminAgreementDTO->getCallback(), $newFileName);
