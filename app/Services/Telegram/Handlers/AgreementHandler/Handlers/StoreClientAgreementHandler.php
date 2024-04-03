@@ -37,6 +37,7 @@ class StoreClientAgreementHandler implements AgreementInterface
                 '+380'.$agreementDTO->getClientAgreementDTO()->getPhone().PHP_EOL.
                 'Область розміщення: '.$agreementDTO->getClientAgreementDTO()->getEquipRegion().PHP_EOL.
                 'Місто розміщення: '.$agreementDTO->getClientAgreementDTO()->getEquipTown().PHP_EOL.
+                'Адреса розміщення: '.$agreementDTO->getClientAgreementDTO()->getEquipStreet().', '.$agreementDTO->getClientAgreementDTO()->getEquipHouse() .PHP_EOL.
                 'Дата встановлення: '.$agreementDTO->getClientAgreementDTO()->getDateFromClient();
 
             $senderId = config('messenger.telegram.admin_id');
