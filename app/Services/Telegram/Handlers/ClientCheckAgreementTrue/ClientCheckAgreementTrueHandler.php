@@ -123,7 +123,7 @@ class ClientCheckAgreementTrueHandler implements CommandsInterface
         ];
 
         $parent = $this->driveCreateFolderService->createFolder($pathArray);
-        Redis::set($key, $parent, 'EX', 260000);
+        Redis::set($key, $parent, 'EX', 86400);
 
         $files = [
             json_decode($files1stPartData->getFileFopEdr()),
