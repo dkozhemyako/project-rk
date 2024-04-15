@@ -24,6 +24,7 @@ class TelegramController extends Controller
      */
     public function index(Request $request): string
     {
+
         Log::info($request);
         $fix = $request->all();
         if (array_key_exists('my_chat_member', $fix)){

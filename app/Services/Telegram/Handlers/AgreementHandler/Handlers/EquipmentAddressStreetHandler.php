@@ -28,7 +28,7 @@ class EquipmentAddressStreetHandler implements AgreementInterface
             );
             return $agreementDTO;
         }
-        $first = mb_substr($arrayStreet[1], 0, 1);
+        $first = mb_substr(trim($arrayStreet[1]), 0, 1);
         if ($first === mb_strtolower($first)){
             $agreementDTO->setMessage(
                 '🤦 Помилка вводу. Необхідно обовязково вводити назву вулиці з великої букви. Будь ласка введіть дані повторно.'
