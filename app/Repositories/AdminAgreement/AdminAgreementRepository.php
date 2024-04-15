@@ -13,7 +13,7 @@ class AdminAgreementRepository
 {
     public function store(AdminAgreementDTO $dto): void
     {
-         DB::table('admin_agreements')
+        DB::table('admin_agreements')
             ->insert([
                 'id' => $dto->getCallback(),
                 'created_at' => Carbon::createFromTimestamp(time()),

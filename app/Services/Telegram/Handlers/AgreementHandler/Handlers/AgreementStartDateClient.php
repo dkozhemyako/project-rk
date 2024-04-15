@@ -49,6 +49,15 @@ class AgreementStartDateClient implements AgreementInterface
 
             return $agreementDTO;
         }
+
+        if (mb_strlen($arrayDate[0]) > 2 || mb_strlen($arrayDate[1]) > 2 || mb_strlen($arrayDate[2]) > 4){
+            $agreementDTO->setMessage(
+                '🤦 Дата вказана з помилками, перевірте чи нема зайвих символів або їх недостатньо. Будь ласка вкажіть дату повторно у форматі ДД.ММ.РРРР (наприклад 31.12.2024)'
+            );
+
+            return $agreementDTO;
+        }
+
         $today = date ('d.m.Y', time());
         $todayYear = date('Y', time());
         if ((int)$arrayDate[2] < (int)$todayYear) {

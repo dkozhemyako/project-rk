@@ -29,7 +29,7 @@ class EquipmentAddressTownHandler implements AgreementInterface
             return $agreementDTO;
         }
 
-        $first = mb_substr($arrayTown[1], 0, 1);
+        $first = mb_substr(trim($arrayTown[1]), 0, 1);
         if ($first === mb_strtolower($first)){
             $agreementDTO->setMessage(
                 '🤦 Помилка вводу. Необхідно обовязково вводити назву населеного пункту з великої букви. Будь ласка введіть дані повторно.'
