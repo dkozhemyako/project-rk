@@ -22,6 +22,7 @@ class ClientAddressRegionHandler implements AgreementInterface
         }
 
         $regions = [
+            'АР Крим',
             'Автономна Республіка Крим',
             'Вінницька',
             'Волинська',
