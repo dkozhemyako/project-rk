@@ -26,6 +26,8 @@ class EquipmentAddressAdditionalHandler implements AgreementInterface
                 'Невдовзі ми відправимо або вже відправили (дивіться вище) договір оренди для ознайомлення. Підтвердиити його необхідно за допомогою кнопки "Приймаю умови договору".'
             );
 
+            $agreementDTO->setReplyMarkup($this->replyMarkup());
+
             return $agreementDTO;
 
         }
