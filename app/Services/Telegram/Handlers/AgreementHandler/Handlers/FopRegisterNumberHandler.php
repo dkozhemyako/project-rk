@@ -25,8 +25,8 @@ class FopRegisterNumberHandler implements AgreementInterface
             return $next($agreementDTO);
         }
 
-        if(mb_strlen($agreementDTO->getMessage()) != 19){
-            $agreementDTO->setMessage('🤦 Номер запису в ЄДР вказано не вірно, номер повинен містити 19 чисел. Будьласка вкажіть номер запису в ЄДР повторно.');
+        if(mb_strlen($agreementDTO->getMessage()) != 19 || mb_strlen($agreementDTO->getMessage()) != 17){
+            $agreementDTO->setMessage('🤦 Номер запису в ЄДР вказано не вірно, номер повинен містити 19 або 17 чисел. Будьласка вкажіть номер запису в ЄДР повторно.');
             return $agreementDTO;
         }
 
