@@ -18,6 +18,8 @@ class ClientFilesIterator
     protected string $equip_town;
     protected string $equip_street;
     protected string $equip_house;
+
+    protected string $eq_type;
     public function __construct(object $data)
     {
         $this->file_fop_edr = $data->file_fop_edr;
@@ -33,7 +35,16 @@ class ClientFilesIterator
         $this->equip_town = $data->equip_town;
         $this->equip_street = $data->equip_street;
         $this->equip_house = $data->equip_house;
+        $this->eq_type = $data->eq_type;
 
+    }
+
+    /**
+     * @return string
+     */
+    public function getEqType(): string
+    {
+        return $this->eq_type;
     }
 
     /**

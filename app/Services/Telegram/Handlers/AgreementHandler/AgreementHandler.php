@@ -6,6 +6,7 @@ use App\Services\Messenger\MessageDTO;
 use App\Services\Telegram\CommandsInterface;
 use App\Services\Telegram\Handlers\AgreementHandler\DTO\AgreementDTO;
 use App\Services\Telegram\Handlers\AgreementHandler\Handlers\AgreementStartDateClient;
+use App\Services\Telegram\Handlers\AgreementHandler\Handlers\AgreementTypeHandler;
 use App\Services\Telegram\Handlers\AgreementHandler\Handlers\CheckSaveFileAgrHandler;
 use App\Services\Telegram\Handlers\AgreementHandler\Handlers\CheckFopSaveFileEdrHandler;
 use App\Services\Telegram\Handlers\AgreementHandler\Handlers\ClientAddressFlatHandler;
@@ -44,6 +45,7 @@ class AgreementHandler implements CommandsInterface
     public const HANDLERS = [
         PreparatoryHandler::class,
         //
+        AgreementTypeHandler::class,
         ClientTypeHandler::class,
         //
         FopSaveFileEdrHandler::class,

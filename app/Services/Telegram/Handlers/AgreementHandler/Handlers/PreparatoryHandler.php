@@ -2,6 +2,7 @@
 
 namespace App\Services\Telegram\Handlers\AgreementHandler\Handlers;
 
+use App\Enums\EqTypeClientEnum;
 use App\Enums\TelegramCommandEnum;
 use App\Enums\TypeClientEnum;
 use App\Services\Telegram\Handlers\AgreementHandler\AgreementInterface;
@@ -17,17 +18,23 @@ class PreparatoryHandler implements AgreementInterface
                 [
                     [ //строка
                         [ //кнопка
-                            'text' => '👨‍💻 Фізична особа-підприємець',
+                            'text' => EqTypeClientEnum::HV->value,
                         ],
                         [ //кнопка
-                            'text' => '👨‍💼 Фізична особa',
+                            'text' => EqTypeClientEnum::KK->value,
                         ],
 
+                    ],
+                    [ //строка
+                        [ //кнопка
+                            'text' => EqTypeClientEnum::PACK->value,
+                        ],
                     ],
                 ],
             'one_time_keyboard' => true,
             'resize_keyboard' => true,
         ];
+
 
     public function handle(AgreementDTO $agreementDTO, Closure $next): AgreementDTO
     {
@@ -36,6 +43,7 @@ class PreparatoryHandler implements AgreementInterface
             $senderId = $agreementDTO->getSenderId();
 
                 Redis::del(
+                    $senderId . AgreementTypeHandler::AGR_STAGE_AGR_TYPE,
                     $senderId . ClientTypeHandler::AGR_STAGE_CLIENT_TYPE,
                     $senderId . FopSaveFileEdrHandler::SAVE_FILE_FOP_EDR,
                     $senderId . FopSaveFileAgrHandler::SAVE_FILE_FOP_AGR,
@@ -66,8 +74,7 @@ class PreparatoryHandler implements AgreementInterface
                     $senderId . CheckSaveFileAgrHandler::CHECK_SAVE_FILE_FOP_AGR,
             );
 
-            $message = 'Для формування договору, нам необхідно отримати інформацію про орендаря.' . PHP_EOL;
-            $message .= 'Оберіть організаційно-правову форму 👇';
+            $message = 'Оберіть комплект обладнання 👇';
 
             $agreementDTO->setMessage($message);
             $agreementDTO->setReplyMarkup($this->replyMarkup);

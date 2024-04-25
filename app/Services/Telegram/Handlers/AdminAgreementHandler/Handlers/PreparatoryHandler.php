@@ -53,6 +53,13 @@ class PreparatoryHandler implements AdminAgreementInterface
                     $senderId . CreateAdminAgreementHandler::AGR_CREATE_ADMIN,
                     $senderId . StoreAdminAgreementHandler::AGR_STORE_ADMIN,
                     $senderId . GetAdminDraftAgreementHandler::AGR_DRAFT_ADMIN,
+                    $senderId . AdminAgreementStartDateHandler::AGR_EQ_TYPE_ADMIN,
+                    $senderId . AdminAgreementCoffeeMachineModelHandler::AGR_CM_MODEL_ADMIN,
+                    $senderId . AdminAgreementCoffeeMachineConditionHandler::AGR_CM_CONDITION_ADMIN,
+                    $senderId . AdminAgreementCoffeeMachineCostHandler::AGR_CM_COST_ADMIN,
+                    $senderId . AdminAgreementCoffeeGrinderModelHandler::AGR_CG_MODEL_ADMIN,
+                    $senderId . AdminAgreementCoffeeGrinderConditionHandler::AGR_CG_CONDITION_ADMIN,
+                    $senderId . AdminAgreementCoffeeGrinderCostHandler::AGR_CG_COST_ADMIN,
             );
 
 

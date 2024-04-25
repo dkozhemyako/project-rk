@@ -2,6 +2,7 @@
 
 namespace App\Services\Telegram\Handlers\AgreementHandler\Handlers;
 
+use App\Enums\EqTypeClientEnum;
 use App\Enums\TypeClientEnum;
 use App\Repositories\ClientAgreement\DTO\ClientAgreementDTO;
 use App\Services\Telegram\Handlers\AgreementHandler\AgreementInterface;
@@ -40,6 +41,7 @@ class ClientTypeHandler implements AgreementInterface
         if (Redis::exists($key) == true){
 
             $agreementDTO->setClientAgreementDTO(new ClientAgreementDTO());
+            $agreementDTO->getClientAgreementDTO()->setEqType(EqTypeClientEnum::from(Redis::get($agreementDTO->getSenderId() . AgreementTypeHandler::AGR_STAGE_AGR_TYPE)));
             $agreementDTO->getClientAgreementDTO()->setType(TypeClientEnum::from(Redis::get($key)));
             $agreementDTO->getClientAgreementDTO()->setTelegramId($agreementDTO->getSenderId());
             return $next($agreementDTO);
