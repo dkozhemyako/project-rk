@@ -16,7 +16,7 @@ class EquipmentWaitHandler implements CommandsInterface
                             'text' => '™ Frosty 78L',
                         ],
                         [ //кнопка
-                            'text' => '⬜ Очікується',
+                            'text' => '™ Frosty RT98L',
                         ],
 
                     ],

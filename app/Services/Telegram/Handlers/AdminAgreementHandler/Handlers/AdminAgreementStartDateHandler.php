@@ -4,6 +4,8 @@ namespace App\Services\Telegram\Handlers\AdminAgreementHandler\Handlers;
 
 
 
+use App\Enums\EqTypeClientEnum;
+use App\Repositories\AdminAgreement\AdminAgreementRepository;
 use App\Services\Telegram\Handlers\AdminAgreementHandler\AdminAgreementInterface;
 use App\Services\Telegram\Handlers\AdminAgreementHandler\DTO\AdminAgreementDTO;
 use Carbon\Carbon;
@@ -13,15 +15,21 @@ use Illuminate\Support\Facades\Redis;
 class AdminAgreementStartDateHandler implements AdminAgreementInterface
 {
     public const AGR_START_DATE_ADMIN = '_ADMIN_START_DATE';
+    public const AGR_EQ_TYPE_ADMIN = '_ADMIN_EQ_TYPE';
 
+    public function __construct(
+        protected AdminAgreementRepository $adminAgreementRepository,
+    ){}
 
     public function handle(AdminAgreementDTO $adminAgreementDTO, Closure $next): AdminAgreementDTO
     {
         $key = $adminAgreementDTO->getSenderId() . self::AGR_START_DATE_ADMIN;
+        $keyEqType = $adminAgreementDTO->getSenderId() . self::AGR_EQ_TYPE_ADMIN;
 
         if (Redis::exists($key) == true){
 
             $adminAgreementDTO->setDateFromAdmin(Redis::get($key));
+            $adminAgreementDTO->setEqType(Redis::get($keyEqType));
 
             return $next($adminAgreementDTO);
         }
@@ -79,9 +87,22 @@ class AdminAgreementStartDateHandler implements AdminAgreementInterface
 
         Redis::set($key, $adminAgreementDTO->getMessage(), 'EX', 260000);
 
-        $adminAgreementDTO->setMessage(
-            'Вкажіть модель встановлюємого обладнання.'
-        );
-        return $adminAgreementDTO;
+        $clientAgreementData = $this->adminAgreementRepository->getClientAgreementData($adminAgreementDTO->getCallback());
+        Redis::set($keyEqType, $clientAgreementData->getEqType(), 'EX', 260000);
+
+        if($clientAgreementData->getEqType() == EqTypeClientEnum::HV->value || $clientAgreementData->getEqType() == EqTypeClientEnum::PACK->value){
+            $adminAgreementDTO->setMessage(
+                'Вкажіть модель холодильної вітрини.'
+            );
+            return $adminAgreementDTO;
+        }
+
+        if($clientAgreementData->getEqType() == EqTypeClientEnum::KK->value){
+            $adminAgreementDTO->setMessage(
+                'Вкажіть модель кавоварки.'
+            );
+            return $adminAgreementDTO;
+        }
+
     }
 }

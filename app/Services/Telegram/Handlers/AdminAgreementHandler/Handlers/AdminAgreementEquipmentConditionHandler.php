@@ -4,6 +4,7 @@ namespace App\Services\Telegram\Handlers\AdminAgreementHandler\Handlers;
 
 
 
+use App\Enums\EqTypeClientEnum;
 use App\Enums\EquipmentConditionEnum;
 use App\Services\Telegram\Handlers\AdminAgreementHandler\AdminAgreementInterface;
 use App\Services\Telegram\Handlers\AdminAgreementHandler\DTO\AdminAgreementDTO;
@@ -36,6 +37,10 @@ class AdminAgreementEquipmentConditionHandler implements AdminAgreementInterface
     {
         $key = $adminAgreementDTO->getSenderId() . self::AGR_EQUIP_CONDITION_ADMIN;
 
+        if ($adminAgreementDTO->getEqType() == EqTypeClientEnum::KK->value){
+            return $next($adminAgreementDTO);
+        }
+
         if (Redis::exists($key) == true){
 
             $adminAgreementDTO->setEquipmentCondition(EquipmentConditionEnum::from(Redis::get($key)));
@@ -54,7 +59,7 @@ class AdminAgreementEquipmentConditionHandler implements AdminAgreementInterface
         Redis::set($key, $adminAgreementDTO->getMessage(), 'EX', 260000);
 
         $adminAgreementDTO->setMessage(
-            'Вкажіть вартість обладнання (тільки цифри, наприклад 5000)'
+            'Вкажіть вартість холодильної вітрини (тільки цифри, наприклад 5000)'
         );
 
         return $adminAgreementDTO;

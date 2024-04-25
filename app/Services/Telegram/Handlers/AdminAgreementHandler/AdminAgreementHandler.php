@@ -5,6 +5,12 @@ namespace App\Services\Telegram\Handlers\AdminAgreementHandler;
 use App\Services\Messenger\MessageDTO;
 use App\Services\Telegram\CommandsInterface;
 use App\Services\Telegram\Handlers\AdminAgreementHandler\DTO\AdminAgreementDTO;
+use App\Services\Telegram\Handlers\AdminAgreementHandler\Handlers\AdminAgreementCoffeeGrinderConditionHandler;
+use App\Services\Telegram\Handlers\AdminAgreementHandler\Handlers\AdminAgreementCoffeeGrinderCostHandler;
+use App\Services\Telegram\Handlers\AdminAgreementHandler\Handlers\AdminAgreementCoffeeGrinderModelHandler;
+use App\Services\Telegram\Handlers\AdminAgreementHandler\Handlers\AdminAgreementCoffeeMachineConditionHandler;
+use App\Services\Telegram\Handlers\AdminAgreementHandler\Handlers\AdminAgreementCoffeeMachineCostHandler;
+use App\Services\Telegram\Handlers\AdminAgreementHandler\Handlers\AdminAgreementCoffeeMachineModelHandler;
 use App\Services\Telegram\Handlers\AdminAgreementHandler\Handlers\AdminAgreementEquipmentConditionHandler;
 use App\Services\Telegram\Handlers\AdminAgreementHandler\Handlers\AdminAgreementEquipmentCostHandler;
 use App\Services\Telegram\Handlers\AdminAgreementHandler\Handlers\AdminAgreementEquipmentModelHandler;
@@ -22,9 +28,19 @@ class AdminAgreementHandler implements CommandsInterface
         [
             PreparatoryHandler::class,
             AdminAgreementStartDateHandler::class,
+            //
             AdminAgreementEquipmentModelHandler::class,
             AdminAgreementEquipmentConditionHandler::class,
             AdminAgreementEquipmentCostHandler::class,
+            //
+            AdminAgreementCoffeeMachineModelHandler::class,
+            AdminAgreementCoffeeMachineConditionHandler::class,
+            AdminAgreementCoffeeMachineCostHandler::class,
+            //
+            AdminAgreementCoffeeGrinderModelHandler::class,
+            AdminAgreementCoffeeGrinderConditionHandler::class,
+            AdminAgreementCoffeeGrinderCostHandler::class,
+            //
             AdminAgreementEquipmentRentCostHandler::class,
             CreateAdminAgreementHandler::class,
             StoreAdminAgreementHandler::class,

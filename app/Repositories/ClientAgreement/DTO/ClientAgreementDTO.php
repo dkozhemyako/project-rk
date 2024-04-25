@@ -2,12 +2,14 @@
 
 namespace App\Repositories\ClientAgreement\DTO;
 
+use App\Enums\EqTypeClientEnum;
 use App\Enums\TypeClientEnum;
 
 class ClientAgreementDTO
 {
     protected string $dateFromClient;
     protected TypeClientEnum $type;
+    protected EqTypeClientEnum $eqType;
     protected string $name;
     protected int $phone;
     protected int $clientInn;
@@ -34,6 +36,23 @@ class ClientAgreementDTO
     protected ? string $fileFoAgrRent = null;
     protected ? string $fileDraftAgreement = null;
     protected int $telegramId;
+
+    /**
+     * @return EqTypeClientEnum
+     */
+    public function getEqType(): EqTypeClientEnum
+    {
+        return $this->eqType;
+    }
+
+    /**
+     * @param EqTypeClientEnum $eqType
+     */
+    public function setEqType(EqTypeClientEnum $eqType): void
+    {
+        $this->eqType = $eqType;
+    }
+
 
     /**
      * @return string

@@ -2,6 +2,7 @@
 
 namespace App\Services\Telegram\Handlers\AgreementHandler\Handlers;
 
+use App\Enums\EqTypeClientEnum;
 use App\Enums\TelegramCommandEnum;
 use App\Enums\TypeClientEnum;
 use App\Services\Telegram\Handlers\AgreementHandler\AgreementInterface;
@@ -38,75 +39,85 @@ class CreateAgreementDraftHandler implements AgreementInterface
         $outputFile = storage_path('app/public/'. $fileName);
 
         if ($agreementDTO->getClientAgreementDTO()->getType() === TypeClientEnum::FOP){
-            #генерація word fop
-            $document = new TemplateProcessor(storage_path('app/client_fop_agreement.docx'));
+                #генерація word fop холодильна вітрина
+                $document = new TemplateProcessor(storage_path('app/client_fop_agreement.docx'));
 
-            $document->setValue('agreementNumber', time());
-            $document->setValue('name', $agreementDTO->getClientAgreementDTO()->getName());
-            $document->setValue('shortName', $shortForDraft);
-            $document->setValue('registerNumber', $agreementDTO->getClientAgreementDTO()->getFopInn());
-            $document->setValue('registerDate', $agreementDTO->getClientAgreementDTO()->getFopRegisterDate());
-            $document->setValue('clientRegion', $agreementDTO->getClientAgreementDTO()->getClientRegion());
-            $document->setValue('clientTown', $agreementDTO->getClientAgreementDTO()->getClientTown());
-            $document->setValue('clientStreet', $agreementDTO->getClientAgreementDTO()->getClientStreet());
-            $document->setValue('clientHouse', $agreementDTO->getClientAgreementDTO()->getClientHouse());
-            $document->setValue('clientFlat', $agreementDTO->getClientAgreementDTO()->getClientFlat());
-            $document->setValue('clientINN', $agreementDTO->getClientAgreementDTO()->getClientInn());
-            $document->setValue('equipRegion', $agreementDTO->getClientAgreementDTO()->getEquipRegion());
-            $document->setValue('equipTown', $agreementDTO->getClientAgreementDTO()->getEquipTown());
-            $document->setValue('equipStreet', $agreementDTO->getClientAgreementDTO()->getEquipStreet());
-            $document->setValue('equipHouse', $agreementDTO->getClientAgreementDTO()->getEquipHouse());
-            $document->setValue('equipAdditional', $agreementDTO->getClientAgreementDTO()->getEquipAddressAdd());
-            $document->setValue('phone', '0'.$agreementDTO->getClientAgreementDTO()->getPhone());
-            //admin
-            $document->setValue('adminDate', 'in progress...');
-            $document->setValue('adminEquipModel', 'in progress...');
-            $document->setValue('adminEquipCost', 'in progress...');
-            $document->setValue('adminEquipCondition', 'in progress...');
-            $document->setValue('adminPayDay', 'in progress...');
-            $document->setValue('adminEquipRentCost', 'in progress...');
+                $document->setValue('agreementNumber', time());
+                $document->setValue('name', $agreementDTO->getClientAgreementDTO()->getName());
+                $document->setValue('shortName', $shortForDraft);
+                $document->setValue('registerNumber', $agreementDTO->getClientAgreementDTO()->getFopInn());
+                $document->setValue('registerDate', $agreementDTO->getClientAgreementDTO()->getFopRegisterDate());
+                $document->setValue('clientRegion', $agreementDTO->getClientAgreementDTO()->getClientRegion());
+                $document->setValue('clientTown', $agreementDTO->getClientAgreementDTO()->getClientTown());
+                $document->setValue('clientStreet', $agreementDTO->getClientAgreementDTO()->getClientStreet());
+                $document->setValue('clientHouse', $agreementDTO->getClientAgreementDTO()->getClientHouse());
+                $document->setValue('clientFlat', $agreementDTO->getClientAgreementDTO()->getClientFlat());
+                $document->setValue('clientINN', $agreementDTO->getClientAgreementDTO()->getClientInn());
+                $document->setValue('equipRegion', $agreementDTO->getClientAgreementDTO()->getEquipRegion());
+                $document->setValue('equipTown', $agreementDTO->getClientAgreementDTO()->getEquipTown());
+                $document->setValue('equipStreet', $agreementDTO->getClientAgreementDTO()->getEquipStreet());
+                $document->setValue('equipHouse', $agreementDTO->getClientAgreementDTO()->getEquipHouse());
+                $document->setValue('equipAdditional', $agreementDTO->getClientAgreementDTO()->getEquipAddressAdd());
+                $document->setValue('phone', '0' . $agreementDTO->getClientAgreementDTO()->getPhone());
+                //admin
+                $document->setValue('adminDate', 'in progress...');
+                $document->setValue('adminEquipModel', 'in progress...');
+                $document->setValue('adminEquipCost', 'in progress...');
+                $document->setValue('adminEquipCondition', 'in progress...');
+                $document->setValue('adminPayDay', 'in progress...');
+                $document->setValue('adminEquipRentCost', 'in progress...');
 
-            $document->setImageValue('image', array('path' => storage_path('app/logo.png'), 'width' => 150, 'height' => 100, 'ratio' => false));
+                $document->setImageValue(
+                    'image',
+                    array('path' => storage_path('app/logo.png'), 'width' => 150, 'height' => 100, 'ratio' => false)
+                );
 
-            $document->saveAs($outputFile);
+                $document->saveAs($outputFile);
         }
 
 
         if ($agreementDTO->getClientAgreementDTO()->getType() === TypeClientEnum::FO){
-            #генерація word fo
-            $document = new TemplateProcessor(storage_path('app/client_fo_agreement.docx'));
 
-            $document->setValue('agreementNumber', time());
-            $document->setValue('name', $agreementDTO->getClientAgreementDTO()->getName());
-            $document->setValue('shortName', $shortForDraft);
-            $document->setValue('registerNumber', $agreementDTO->getClientAgreementDTO()->getFopInn());
-            $document->setValue('clientRegion', $agreementDTO->getClientAgreementDTO()->getClientRegion());
-            $document->setValue('clientTown', $agreementDTO->getClientAgreementDTO()->getClientTown());
-            $document->setValue('clientStreet', $agreementDTO->getClientAgreementDTO()->getClientStreet());
-            $document->setValue('clientHouse', $agreementDTO->getClientAgreementDTO()->getClientHouse());
-            $document->setValue('clientFlat', $agreementDTO->getClientAgreementDTO()->getClientFlat());
-            $document->setValue('clientINN', $agreementDTO->getClientAgreementDTO()->getClientInn());
-            $document->setValue('equipRegion', $agreementDTO->getClientAgreementDTO()->getEquipRegion());
-            $document->setValue('equipTown', $agreementDTO->getClientAgreementDTO()->getEquipTown());
-            $document->setValue('equipStreet', $agreementDTO->getClientAgreementDTO()->getEquipStreet());
-            $document->setValue('equipHouse', $agreementDTO->getClientAgreementDTO()->getEquipHouse());
-            $document->setValue('equipAdditional', $agreementDTO->getClientAgreementDTO()->getEquipAddressAdd());
-            $document->setValue('passportNumber', $agreementDTO->getClientAgreementDTO()->getPassportSeriesNumber());
-            $document->setValue('passportIssue', $agreementDTO->getClientAgreementDTO()->getPassportIssue());
-            $document->setValue('passportDate', $agreementDTO->getClientAgreementDTO()->getPassportDate());
-            $document->setValue('phone', '0'.$agreementDTO->getClientAgreementDTO()->getPhone());
+                #генерація word fo
+                $document = new TemplateProcessor(storage_path('app/client_fo_agreement.docx'));
 
-            //admin
-            $document->setValue('adminDate', 'in progress...');
-            $document->setValue('adminEquipModel', 'in progress...');
-            $document->setValue('adminEquipCost', 'in progress...');
-            $document->setValue('adminEquipCondition', 'in progress...');
-            $document->setValue('adminPayDay', 'in progress...');
-            $document->setValue('adminEquipRentCost', 'in progress...');
+                $document->setValue('agreementNumber', time());
+                $document->setValue('name', $agreementDTO->getClientAgreementDTO()->getName());
+                $document->setValue('shortName', $shortForDraft);
+                $document->setValue('registerNumber', $agreementDTO->getClientAgreementDTO()->getFopInn());
+                $document->setValue('clientRegion', $agreementDTO->getClientAgreementDTO()->getClientRegion());
+                $document->setValue('clientTown', $agreementDTO->getClientAgreementDTO()->getClientTown());
+                $document->setValue('clientStreet', $agreementDTO->getClientAgreementDTO()->getClientStreet());
+                $document->setValue('clientHouse', $agreementDTO->getClientAgreementDTO()->getClientHouse());
+                $document->setValue('clientFlat', $agreementDTO->getClientAgreementDTO()->getClientFlat());
+                $document->setValue('clientINN', $agreementDTO->getClientAgreementDTO()->getClientInn());
+                $document->setValue('equipRegion', $agreementDTO->getClientAgreementDTO()->getEquipRegion());
+                $document->setValue('equipTown', $agreementDTO->getClientAgreementDTO()->getEquipTown());
+                $document->setValue('equipStreet', $agreementDTO->getClientAgreementDTO()->getEquipStreet());
+                $document->setValue('equipHouse', $agreementDTO->getClientAgreementDTO()->getEquipHouse());
+                $document->setValue('equipAdditional', $agreementDTO->getClientAgreementDTO()->getEquipAddressAdd());
+                $document->setValue(
+                    'passportNumber',
+                    $agreementDTO->getClientAgreementDTO()->getPassportSeriesNumber()
+                );
+                $document->setValue('passportIssue', $agreementDTO->getClientAgreementDTO()->getPassportIssue());
+                $document->setValue('passportDate', $agreementDTO->getClientAgreementDTO()->getPassportDate());
+                $document->setValue('phone', '0' . $agreementDTO->getClientAgreementDTO()->getPhone());
 
-            $document->setImageValue('image', array('path' => storage_path('app/logo.png'), 'width' => 150, 'height' => 100, 'ratio' => false));
+                //admin
+                $document->setValue('adminDate', 'in progress...');
+                $document->setValue('adminEquipModel', 'in progress...');
+                $document->setValue('adminEquipCost', 'in progress...');
+                $document->setValue('adminEquipCondition', 'in progress...');
+                $document->setValue('adminPayDay', 'in progress...');
+                $document->setValue('adminEquipRentCost', 'in progress...');
 
-            $document->saveAs($outputFile);
+                $document->setImageValue(
+                    'image',
+                    array('path' => storage_path('app/logo.png'), 'width' => 150, 'height' => 100, 'ratio' => false)
+                );
+
+                $document->saveAs($outputFile);
         }
 
         #генерація pdf

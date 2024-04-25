@@ -13,12 +13,8 @@ class EquipmentRentalConditionsHandler implements CommandsInterface
                 [
                     [ //строка
                         [ //кнопка
-                            'text' => '⬅ Повернутись назад',
-                        ],
-                        [ //кнопка
                             'text' => '⬆ На головну',
                         ],
-
                     ],
                 ],
             'one_time_keyboard' => true,

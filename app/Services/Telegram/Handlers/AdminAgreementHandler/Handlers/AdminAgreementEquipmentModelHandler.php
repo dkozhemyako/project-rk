@@ -4,6 +4,7 @@ namespace App\Services\Telegram\Handlers\AdminAgreementHandler\Handlers;
 
 
 
+use App\Enums\EqTypeClientEnum;
 use App\Services\Telegram\Handlers\AdminAgreementHandler\AdminAgreementInterface;
 use App\Services\Telegram\Handlers\AdminAgreementHandler\DTO\AdminAgreementDTO;
 use Closure;
@@ -35,6 +36,10 @@ class AdminAgreementEquipmentModelHandler implements AdminAgreementInterface
     {
         $key = $adminAgreementDTO->getSenderId() . self::AGR_EQUIP_MODEL_ADMIN;
 
+        if ($adminAgreementDTO->getEqType() == EqTypeClientEnum::KK->value){
+            return $next($adminAgreementDTO);
+        }
+
         if (Redis::exists($key) == true){
 
             $adminAgreementDTO->setEquipmentModel(Redis::get($key));
@@ -59,7 +64,7 @@ class AdminAgreementEquipmentModelHandler implements AdminAgreementInterface
         Redis::set($key, $adminAgreementDTO->getMessage(), 'EX', 260000);
 
         $adminAgreementDTO->setMessage(
-            'Оберіть стан обладнання 👇'
+            'Оберіть стан холодильної вітрини 👇'
         );
 
         $adminAgreementDTO->setReplyMarkup($this->replyMarkup);

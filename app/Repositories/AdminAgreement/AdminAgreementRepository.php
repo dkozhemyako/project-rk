@@ -22,6 +22,13 @@ class AdminAgreementRepository
                 'equipment_model' => $dto->getEquipmentModel(),
                 'equipment_cost' => $dto->getEquipmentCost(),
                 'equipment_rent_cost' => $dto->getEquipmentRentalCost(),
+                'cm_model' => $dto->getEquipmentModelCoffeeMachine(),
+                'cm_cost' => $dto->getEquipmentCostCoffeeMachine(),
+                'cm_condition' => $dto->getEquipmentConditionCoffeeMachine()->name,
+                'cg_model' => $dto->getEquipmentModelCoffeeGrinder(),
+                'cg_cost' => $dto->getEquipmentCostCoffeeGrinder(),
+                'cg_condition' => $dto->getEquipmentConditionCoffeeGrinder()->name,
+
                 'file_agreement' => $dto->getFileAgreementAdmin(),
             ]);
     }
@@ -78,6 +85,7 @@ class AdminAgreementRepository
                     'file_fo_agr_rent',
                     'file_draft_agreement',
                     'telegram_id',
+                    'eq_type',
                 ])
                 ->where('id', '=', $id)
                 ->first()

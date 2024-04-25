@@ -4,6 +4,7 @@ namespace App\Services\Telegram\Handlers\AdminAgreementHandler\Handlers;
 
 
 
+use App\Enums\EqTypeClientEnum;
 use App\Enums\EquipmentConditionEnum;
 use App\Enums\TypeClientEnum;
 use App\Repositories\AdminAgreement\AdminAgreementRepository;
@@ -48,7 +49,17 @@ class CreateAdminAgreementHandler implements AdminAgreementInterface
 
             if($clientAgreementData->getType() === TypeClientEnum::FOP->name){
                 #генерація word fop
-                $document = new TemplateProcessor(storage_path('app/admin_fop_agreement.docx'));
+                if ($adminAgreementDTO->getEqType() == EqTypeClientEnum::HV->value){
+                    $document = new TemplateProcessor(storage_path('app/admin_fop_agreement.docx'));
+                }
+                if ($adminAgreementDTO->getEqType() == EqTypeClientEnum::KK->value){
+                    $document = new TemplateProcessor(storage_path('app/admin_fop_agreement_kk.docx'));
+                }
+                if ($adminAgreementDTO->getEqType() == EqTypeClientEnum::PACK->value){
+                    $document = new TemplateProcessor(storage_path('app/admin_fop_agreement_pack.docx'));
+                }
+
+
 
                 $document->setValue('agreementNumber', time());
                 $document->setValue('name', $clientAgreementData->getName());
@@ -70,9 +81,34 @@ class CreateAdminAgreementHandler implements AdminAgreementInterface
 
                 //admin
                 $document->setValue('adminDate', $adminAgreementDTO->getDateFromAdmin());
-                $document->setValue('adminEquipModel', $adminAgreementDTO->getEquipmentModel());
-                $document->setValue('adminEquipCost', $adminAgreementDTO->getEquipmentCost());
-                $document->setValue('adminEquipCondition', $adminAgreementDTO->getEquipmentCondition()->value);
+                if ($adminAgreementDTO->getEqType() == EqTypeClientEnum::HV->value){
+                    $document->setValue('adminEquipModel', $adminAgreementDTO->getEquipmentModel());
+                    $document->setValue('adminEquipCost', $adminAgreementDTO->getEquipmentCost());
+                    $document->setValue('adminEquipCondition', $adminAgreementDTO->getEquipmentCondition()->value);
+                }
+                if ($adminAgreementDTO->getEqType() == EqTypeClientEnum::KK->value){
+                    $document->setValue('adminCoffeeMachineModel', $adminAgreementDTO->getEquipmentModelCoffeeMachine());
+                    $document->setValue('adminCoffeeMachineCost', $adminAgreementDTO->getEquipmentCostCoffeeMachine());
+                    $document->setValue('adminCoffeeMachineCondition', $adminAgreementDTO->getEquipmentConditionCoffeeMachine()->value);
+
+                    $document->setValue('adminCoffeeGrinderModel', $adminAgreementDTO->getEquipmentModelCoffeeGrinder());
+                    $document->setValue('adminCoffeeGrinderCost', $adminAgreementDTO->getEquipmentCostCoffeeGrinder());
+                    $document->setValue('adminCoffeeGrinderCondition', $adminAgreementDTO->getEquipmentConditionCoffeeGrinder()->value);
+                }
+                if ($adminAgreementDTO->getEqType() == EqTypeClientEnum::PACK->value) {
+                    $document->setValue('adminEquipModel', $adminAgreementDTO->getEquipmentModel());
+                    $document->setValue('adminEquipCost', $adminAgreementDTO->getEquipmentCost());
+                    $document->setValue('adminEquipCondition', $adminAgreementDTO->getEquipmentCondition()->value);
+
+                    $document->setValue('adminCoffeeMachineModel', $adminAgreementDTO->getEquipmentModelCoffeeMachine());
+                    $document->setValue('adminCoffeeMachineCost', $adminAgreementDTO->getEquipmentCostCoffeeMachine());
+                    $document->setValue('adminCoffeeMachineCondition', $adminAgreementDTO->getEquipmentConditionCoffeeMachine()->value);
+
+                    $document->setValue('adminCoffeeGrinderModel', $adminAgreementDTO->getEquipmentModelCoffeeGrinder());
+                    $document->setValue('adminCoffeeGrinderCost', $adminAgreementDTO->getEquipmentCostCoffeeGrinder());
+                    $document->setValue('adminCoffeeGrinderCondition', $adminAgreementDTO->getEquipmentConditionCoffeeGrinder()->value);
+                }
+
                 $document->setValue('adminPayDay', $shortDate[0]);
                 $document->setValue('adminEquipRentCost', $adminAgreementDTO->getEquipmentRentalCost());
 
@@ -83,7 +119,15 @@ class CreateAdminAgreementHandler implements AdminAgreementInterface
 
             if($clientAgreementData->getType() === TypeClientEnum::FO->name){
                 #генерація word fo
-                $document = new TemplateProcessor(storage_path('app/admin_fo_agreement.docx'));
+                if ($adminAgreementDTO->getEqType() == EqTypeClientEnum::HV->value){
+                    $document = new TemplateProcessor(storage_path('app/admin_fo_agreement.docx'));
+                }
+                if ($adminAgreementDTO->getEqType() == EqTypeClientEnum::KK->value){
+                    $document = new TemplateProcessor(storage_path('app/admin_fo_agreement_kk.docx'));
+                }
+                if ($adminAgreementDTO->getEqType() == EqTypeClientEnum::PACK->value){
+                    $document = new TemplateProcessor(storage_path('app/admin_fo_agreement_pack.docx'));
+                }
 
                 $document->setValue('agreementNumber', time());
                 $document->setValue('name', $clientAgreementData->getName());
@@ -106,9 +150,33 @@ class CreateAdminAgreementHandler implements AdminAgreementInterface
 
                 //admin
                 $document->setValue('adminDate', $adminAgreementDTO->getDateFromAdmin());
-                $document->setValue('adminEquipModel', $adminAgreementDTO->getEquipmentModel());
-                $document->setValue('adminEquipCost', $adminAgreementDTO->getEquipmentCost());
-                $document->setValue('adminEquipCondition', $adminAgreementDTO->getEquipmentCondition()->value);
+                if ($adminAgreementDTO->getEqType() == EqTypeClientEnum::HV->value){
+                    $document->setValue('adminEquipModel', $adminAgreementDTO->getEquipmentModel());
+                    $document->setValue('adminEquipCost', $adminAgreementDTO->getEquipmentCost());
+                    $document->setValue('adminEquipCondition', $adminAgreementDTO->getEquipmentCondition()->value);
+                }
+                if ($adminAgreementDTO->getEqType() == EqTypeClientEnum::KK->value){
+                    $document->setValue('adminCoffeeMachineModel', $adminAgreementDTO->getEquipmentModelCoffeeMachine());
+                    $document->setValue('adminCoffeeMachineCost', $adminAgreementDTO->getEquipmentCostCoffeeMachine());
+                    $document->setValue('adminCoffeeMachineCondition', $adminAgreementDTO->getEquipmentConditionCoffeeMachine()->value);
+
+                    $document->setValue('adminCoffeeGrinderModel', $adminAgreementDTO->getEquipmentModelCoffeeGrinder());
+                    $document->setValue('adminCoffeeGrinderCost', $adminAgreementDTO->getEquipmentCostCoffeeGrinder());
+                    $document->setValue('adminCoffeeGrinderCondition', $adminAgreementDTO->getEquipmentConditionCoffeeGrinder()->value);
+                }
+                if ($adminAgreementDTO->getEqType() == EqTypeClientEnum::PACK->value) {
+                    $document->setValue('adminEquipModel', $adminAgreementDTO->getEquipmentModel());
+                    $document->setValue('adminEquipCost', $adminAgreementDTO->getEquipmentCost());
+                    $document->setValue('adminEquipCondition', $adminAgreementDTO->getEquipmentCondition()->value);
+
+                    $document->setValue('adminCoffeeMachineModel', $adminAgreementDTO->getEquipmentModelCoffeeMachine());
+                    $document->setValue('adminCoffeeMachineCost', $adminAgreementDTO->getEquipmentCostCoffeeMachine());
+                    $document->setValue('adminCoffeeMachineCondition', $adminAgreementDTO->getEquipmentConditionCoffeeMachine()->value);
+
+                    $document->setValue('adminCoffeeGrinderModel', $adminAgreementDTO->getEquipmentModelCoffeeGrinder());
+                    $document->setValue('adminCoffeeGrinderCost', $adminAgreementDTO->getEquipmentCostCoffeeGrinder());
+                    $document->setValue('adminCoffeeGrinderCondition', $adminAgreementDTO->getEquipmentConditionCoffeeGrinder()->value);
+                }
                 $document->setValue('adminPayDay', $shortDate[0]);
                 $document->setValue('adminEquipRentCost', $adminAgreementDTO->getEquipmentRentalCost());
 

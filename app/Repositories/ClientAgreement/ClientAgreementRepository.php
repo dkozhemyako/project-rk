@@ -43,6 +43,7 @@ class ClientAgreementRepository
                 'file_fo_agr_rent' => $dto->getFileFoAgrRent(),
                 'file_draft_agreement' => $dto->getFileDraftAgreement(),
                 'telegram_id' => $dto->getTelegramId(),
+                'eq_type' => $dto->getEqType()->value,
             ]);
     }
 
@@ -86,6 +87,7 @@ class ClientAgreementRepository
                     'equip_town',
                     'equip_street',
                     'equip_house',
+                    'eq_type',
                 ])
                 ->where('id', '=', $id)
                 ->first()

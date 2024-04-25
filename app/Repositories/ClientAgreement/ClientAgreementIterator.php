@@ -32,6 +32,8 @@ class ClientAgreementIterator
     protected ? string $file_fo_agr_rent;
     protected ? string $file_draft_agreement;
     protected int $telegram_id;
+
+    protected string $eq_type;
     public function __construct(object $data)
     {
         $this->id = $data->id;
@@ -62,6 +64,15 @@ class ClientAgreementIterator
         $this->file_fo_agr_rent = $data->file_fo_agr_rent;
         $this->file_draft_agreement = $data->file_draft_agreement;
         $this->telegram_id = $data->telegram_id;
+        $this->eq_type = $data->eq_type;
+    }
+
+    /**
+     * @return string
+     */
+    public function getEqType(): string
+    {
+        return $this->eq_type;
     }
 
     /**

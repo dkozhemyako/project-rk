@@ -36,6 +36,15 @@ class StartHandler implements CommandsInterface
                       ],
 
                   ],
+                  [ //строка
+                      [ //кнопка
+                          'text' => '☕ Кавоварки',
+                      ],
+                      [ //кнопка
+                          'text' => '☕ Кавомолки',
+                      ],
+
+                  ],
               ],
             'one_time_keyboard' => true,
             'resize_keyboard' => true,

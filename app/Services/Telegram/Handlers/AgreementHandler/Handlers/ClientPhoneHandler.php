@@ -72,7 +72,7 @@ class ClientPhoneHandler implements AgreementInterface
         Redis::set($key, (int)$agreementDTO->getMessage(), 'EX', 260000);
 
         if ($agreementDTO->getClientAgreementDTO()->getType() === TypeClientEnum::FOP){
-            $agreementDTO->setMessage('💬 Вкажіть номер запису в ЄДР , має бути 19 символів');
+            $agreementDTO->setMessage('💬 Вкажіть номер запису в ЄДР , має бути 19 або 17 символів');
             return $agreementDTO;
         }
 
