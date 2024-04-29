@@ -5,6 +5,7 @@ namespace App\Services\Telegram\Handlers\AdminAgreementHandler\Handlers;
 
 
 use App\Enums\EqTypeClientEnum;
+use App\Enums\TelegramCommandEnum;
 use App\Services\Telegram\Handlers\AdminAgreementHandler\AdminAgreementInterface;
 use App\Services\Telegram\Handlers\AdminAgreementHandler\DTO\AdminAgreementDTO;
 use Closure;
@@ -25,6 +26,12 @@ class AdminAgreementCoffeeGrinderModelHandler implements AdminAgreementInterface
                         ],
 
                     ],
+                    [ //строка
+                        [ //кнопка
+                            'text' => TelegramCommandEnum::agreementAdminBack->value,
+                        ],
+                    ],
+
                 ],
             'one_time_keyboard' => true,
             'resize_keyboard' => true,
@@ -38,6 +45,25 @@ class AdminAgreementCoffeeGrinderModelHandler implements AdminAgreementInterface
 
         if ($adminAgreementDTO->getEqType() == EqTypeClientEnum::HV->value){
             return $next($adminAgreementDTO);
+        }
+
+        if ($adminAgreementDTO->getMessage() === TelegramCommandEnum::agreementAdminBack->value
+            && Redis::get($adminAgreementDTO->getSenderId() . '_admin') == 9)
+        {
+            Redis::del(
+                $adminAgreementDTO->getSenderId() . AdminAgreementCoffeeGrinderConditionHandler::AGR_CG_CONDITION_ADMIN,
+            );
+
+            Redis::set($adminAgreementDTO->getSenderId() . '_admin', 8);
+
+            $adminAgreementDTO->setMessage(
+                'Оберіть стан кавомолки 👇'
+            );
+
+            $adminAgreementDTO->setReplyMarkup($this->replyMarkup);
+
+            return $adminAgreementDTO;
+
         }
 
         if (Redis::exists($key) == true){
@@ -62,6 +88,7 @@ class AdminAgreementCoffeeGrinderModelHandler implements AdminAgreementInterface
         }
 
         Redis::set($key, $adminAgreementDTO->getMessage(), 'EX', 260000);
+        Redis::set($adminAgreementDTO->getSenderId() . '_admin', 8);
 
         $adminAgreementDTO->setMessage(
             'Оберіть стан кавомолки 👇'

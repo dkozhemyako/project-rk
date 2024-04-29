@@ -2,6 +2,7 @@
 
 namespace App\Services\Telegram\Handlers\AgreementHandler\Handlers;
 
+use App\Enums\TelegramCommandEnum;
 use App\Enums\TypeClientEnum;
 use App\Services\Telegram\Handlers\AgreementHandler\AgreementInterface;
 use App\Services\Telegram\Handlers\AgreementHandler\DTO\AgreementDTO;
@@ -21,6 +22,19 @@ class PassportNumberHandler implements AgreementInterface
         }
 
         $keyRedis = $agreementDTO->getSenderId() . self::AGR_PASSPORT_NUMBER;
+
+        if (Redis::get($agreementDTO->getSenderId()) == 200
+            && $agreementDTO->getMessage() == TelegramCommandEnum::agreementBack->value)
+        {
+            Redis::del(
+                $agreementDTO->getSenderId() . PassportIssuedHandler::AGR_PASSPORT_ISSUED,
+            );
+            Redis::set($agreementDTO->getSenderId(), 8);
+
+            $agreementDTO->setMessage('💬 Вкажіть ким виданий докумет - номер або назву органу');
+            $agreementDTO->setReplyMarkup($this->replyMarkup());
+            return $agreementDTO;
+        }
 
         if (Redis::exists($keyRedis) == true){
             return $next($agreementDTO);
@@ -81,7 +95,28 @@ class PassportNumberHandler implements AgreementInterface
         }
 
         Redis::set($keyRedis, $agreementDTO->getMessage(), 'EX', 260000);
+        Redis::set($agreementDTO->getSenderId(), 8);
         $agreementDTO->setMessage('💬 Вкажіть ким виданий докумет - номер або назву органу');
+        $agreementDTO->setReplyMarkup($this->replyMarkup());
         return $agreementDTO;
+    }
+
+    private function replyMarkup(): array
+    {
+        return [
+            'keyboard' =>
+                [
+                    [ //строка
+                        [ //кнопка
+                            'text' => TelegramCommandEnum::returnMain->value,
+                        ],
+                        [ //кнопка
+                            'text' => TelegramCommandEnum::agreementBack->value,
+                        ],
+                    ],
+                ],
+            'one_time_keyboard' => true,
+            'resize_keyboard' => true,
+        ];
     }
 }

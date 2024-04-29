@@ -2,6 +2,7 @@
 
 namespace App\Services\Telegram\Handlers\AgreementHandler\Handlers;
 
+use App\Enums\TelegramCommandEnum;
 use App\Enums\TypeClientEnum;
 use App\Services\Telegram\Handlers\AgreementHandler\AgreementInterface;
 use App\Services\Telegram\Handlers\AgreementHandler\DTO\AgreementDTO;
@@ -17,6 +18,21 @@ class AgreementStartDateClient implements AgreementInterface
     public function handle(AgreementDTO $agreementDTO, Closure $next): AgreementDTO
     {
         $key = $agreementDTO->getSenderId() . self::AGR_START_DATE_CLIENT;
+
+        if (Redis::get($agreementDTO->getSenderId()) == 6
+            && $agreementDTO->getMessage() == TelegramCommandEnum::agreementBack->value) {
+            Redis::del(
+                $agreementDTO->getSenderId() . ClientNameHandler::AGR_STAGE_CLIENT_NAME,
+            );
+
+            Redis::set($agreementDTO->getSenderId(), 5);
+
+            $agreementDTO->setMessage(
+                '💬 Вкажіть повністю ПІБ орендаря обладнання.'
+            );
+            $agreementDTO->setReplyMarkup($this->replyMarkup());
+            return $agreementDTO;
+        }
 
         if (Redis::exists($key) == true){
 
@@ -77,10 +93,31 @@ class AgreementStartDateClient implements AgreementInterface
         }
 
         Redis::set($key, $agreementDTO->getMessage(), 'EX', 260000);
+        Redis::set($agreementDTO->getSenderId(), 5);
 
         $agreementDTO->setMessage(
             '💬 Вкажіть повністю ПІБ орендаря обладнання.'
         );
+        $agreementDTO->setReplyMarkup($this->replyMarkup());
         return $agreementDTO;
+    }
+
+    private function replyMarkup(): array
+    {
+        return [
+            'keyboard' =>
+                [
+                    [ //строка
+                        [ //кнопка
+                            'text' => TelegramCommandEnum::returnMain->value,
+                        ],
+                        [ //кнопка
+                            'text' => TelegramCommandEnum::agreementBack->value,
+                        ],
+                    ],
+                ],
+            'one_time_keyboard' => true,
+            'resize_keyboard' => true,
+            ];
     }
 }

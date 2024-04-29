@@ -6,6 +6,7 @@ namespace App\Services\Telegram\Handlers\AdminAgreementHandler\Handlers;
 
 use App\Enums\EqTypeClientEnum;
 use App\Enums\EquipmentConditionEnum;
+use App\Enums\TelegramCommandEnum;
 use App\Services\Telegram\Handlers\AdminAgreementHandler\AdminAgreementInterface;
 use App\Services\Telegram\Handlers\AdminAgreementHandler\DTO\AdminAgreementDTO;
 use Closure;
@@ -24,7 +25,11 @@ class AdminAgreementCoffeeMachineConditionHandler implements AdminAgreementInter
                         [ //кнопка
                             'text' => 'не було у використанні',
                         ],
-
+                    ],
+                    [ //строка
+                        [ //кнопка
+                            'text' => TelegramCommandEnum::agreementAdminBack->value,
+                        ],
                     ],
                 ],
             'one_time_keyboard' => true,
@@ -39,6 +44,24 @@ class AdminAgreementCoffeeMachineConditionHandler implements AdminAgreementInter
 
         if ($adminAgreementDTO->getEqType() == EqTypeClientEnum::HV->value){
             return $next($adminAgreementDTO);
+        }
+
+        if ($adminAgreementDTO->getMessage() === TelegramCommandEnum::agreementAdminBack->value
+            && Redis::get($adminAgreementDTO->getSenderId() . '_admin') == 7)
+        {
+            Redis::del(
+                $adminAgreementDTO->getSenderId() . AdminAgreementCoffeeMachineCostHandler::AGR_CM_COST_ADMIN,
+            );
+
+            Redis::set($adminAgreementDTO->getSenderId() . '_admin', 6);
+
+            $adminAgreementDTO->setMessage(
+                'Вкажіть вартість кавоварки (тільки цифри, наприклад 5000)'
+            );
+            $adminAgreementDTO->setReplyMarkup($this->replyMarkup());
+
+            return $adminAgreementDTO;
+
         }
 
         if (Redis::exists($key) == true){
@@ -57,11 +80,29 @@ class AdminAgreementCoffeeMachineConditionHandler implements AdminAgreementInter
         }
 
         Redis::set($key, $adminAgreementDTO->getMessage(), 'EX', 260000);
+        Redis::set($adminAgreementDTO->getSenderId() . '_admin', 6);
 
         $adminAgreementDTO->setMessage(
             'Вкажіть вартість кавоварки (тільки цифри, наприклад 5000)'
         );
+        $adminAgreementDTO->setReplyMarkup($this->replyMarkup());
 
         return $adminAgreementDTO;
+    }
+
+    private function replyMarkup(): array
+    {
+        return [
+            'keyboard' =>
+                [
+                    [ //строка
+                        [ //кнопка
+                            'text' => TelegramCommandEnum::agreementAdminBack->value,
+                        ],
+                    ],
+                ],
+            'one_time_keyboard' => true,
+            'resize_keyboard' => true,
+        ];
     }
 }

@@ -5,6 +5,7 @@ namespace App\Services\Telegram\Handlers\AdminAgreementHandler\Handlers;
 
 
 use App\Enums\EqTypeClientEnum;
+use App\Enums\TelegramCommandEnum;
 use App\Services\Telegram\Handlers\AdminAgreementHandler\AdminAgreementInterface;
 use App\Services\Telegram\Handlers\AdminAgreementHandler\DTO\AdminAgreementDTO;
 use Closure;
@@ -23,7 +24,11 @@ class AdminAgreementCoffeeMachineModelHandler implements AdminAgreementInterface
                         [ //кнопка
                             'text' => 'не було у використанні',
                         ],
-
+                    ],
+                    [ //строка
+                        [ //кнопка
+                            'text' => TelegramCommandEnum::agreementAdminBack->value,
+                        ],
                     ],
                 ],
             'one_time_keyboard' => true,
@@ -38,6 +43,24 @@ class AdminAgreementCoffeeMachineModelHandler implements AdminAgreementInterface
 
         if ($adminAgreementDTO->getEqType() == EqTypeClientEnum::HV->value){
             return $next($adminAgreementDTO);
+        }
+
+        if ($adminAgreementDTO->getMessage() === TelegramCommandEnum::agreementAdminBack->value
+            && Redis::get($adminAgreementDTO->getSenderId() . '_admin') == 6)
+        {
+            Redis::del(
+                $adminAgreementDTO->getSenderId() . AdminAgreementCoffeeMachineConditionHandler::AGR_CM_CONDITION_ADMIN,
+            );
+
+            Redis::set($adminAgreementDTO->getSenderId() . '_admin', 5);
+
+            $adminAgreementDTO->setMessage(
+                'Оберіть стан кавоварки 👇'
+            );
+
+            $adminAgreementDTO->setReplyMarkup($this->replyMarkup);
+
+            return $adminAgreementDTO;
         }
 
         if (Redis::exists($key) == true){
@@ -62,6 +85,7 @@ class AdminAgreementCoffeeMachineModelHandler implements AdminAgreementInterface
         }
 
         Redis::set($key, $adminAgreementDTO->getMessage(), 'EX', 260000);
+        Redis::set($adminAgreementDTO->getSenderId() . '_admin', 5);
 
         $adminAgreementDTO->setMessage(
             'Оберіть стан кавоварки 👇'
@@ -71,4 +95,5 @@ class AdminAgreementCoffeeMachineModelHandler implements AdminAgreementInterface
 
         return $adminAgreementDTO;
     }
+
 }

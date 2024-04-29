@@ -3,6 +3,7 @@
 namespace App\Services\Telegram\Handlers\AdminAgreementHandler\Handlers;
 
 
+use App\Enums\TelegramCommandEnum;
 use App\Enums\TypeClientEnum;
 use App\Repositories\AdminAgreement\AdminAgreementRepository;
 use App\Services\Messenger\MessageDTO;
@@ -44,6 +45,8 @@ class StoreAdminAgreementHandler implements AdminAgreementInterface
             'За необхідності відредагуйте його та відправте настпуним повідомленням файл .docx який буде відправлено клієнту для погодження.'
         );
 
+        $adminAgreementDTO->setReplyMarkup($this->replyMarkup());
+
         /*
          #відправка pdf
         $dtoFile = new MessageDTO(
@@ -83,5 +86,21 @@ class StoreAdminAgreementHandler implements AdminAgreementInterface
         Redis::set($key, 'checked', 'EX', 260000);
 
         return $adminAgreementDTO;
+    }
+
+    private function replyMarkup(): array
+    {
+        return [
+            'keyboard' =>
+                [
+                    [ //строка
+                        [ //кнопка
+                            'text' => TelegramCommandEnum::agreementAdminBack->value,
+                        ],
+                    ],
+                ],
+            'one_time_keyboard' => true,
+            'resize_keyboard' => true,
+        ];
     }
 }

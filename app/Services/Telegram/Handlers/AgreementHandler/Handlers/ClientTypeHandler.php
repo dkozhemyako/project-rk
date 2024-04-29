@@ -3,6 +3,7 @@
 namespace App\Services\Telegram\Handlers\AgreementHandler\Handlers;
 
 use App\Enums\EqTypeClientEnum;
+use App\Enums\TelegramCommandEnum;
 use App\Enums\TypeClientEnum;
 use App\Repositories\ClientAgreement\DTO\ClientAgreementDTO;
 use App\Services\Telegram\Handlers\AgreementHandler\AgreementInterface;
@@ -22,12 +23,20 @@ class ClientTypeHandler implements AgreementInterface
                 [
                     [ //строка
                         [ //кнопка
-                            'text' => '👨‍💻 Фізична особа-підприємець',
+                            'text' => TypeClientEnum::FOP->value,
                         ],
                         [ //кнопка
-                            'text' => '👨‍💼 Фізична особа',
+                            'text' => TypeClientEnum::FO->value,
                         ],
 
+                    ],
+                    [ //строка
+                        [ //кнопка
+                            'text' => TelegramCommandEnum::returnMain->value,
+                        ],
+                        [ //кнопка
+                            'text' => TelegramCommandEnum::agreementBack->value,
+                        ],
                     ],
                 ],
             'one_time_keyboard' => true,
@@ -37,6 +46,50 @@ class ClientTypeHandler implements AgreementInterface
     public function handle(AgreementDTO $agreementDTO, Closure $next): AgreementDTO
     {
         $key = $agreementDTO->getSenderId() . self::AGR_STAGE_CLIENT_TYPE;
+
+        if (Redis::get($agreementDTO->getSenderId()) == 3
+            && $agreementDTO->getMessage() == TelegramCommandEnum::agreementBack->value)
+        {
+            Redis::del(
+                $agreementDTO->getSenderId() . FopSaveFileEdrHandler::SAVE_FILE_FOP_EDR,
+                $agreementDTO->getSenderId() . FopSaveFileEdrHandler::MEDIA_FILE_FOP_EDR,
+                $agreementDTO->getSenderId() . CheckFopSaveFileEdrHandler::CHECK_SAVE_FILE_FOP_EDR,
+                $agreementDTO->getSenderId() . FoSaveFilePas1stHandler::SAVE_FILE_FO_PAS_1ST,
+
+
+            );
+            Redis::set($agreementDTO->getSenderId(), 2);
+
+            $typeClient = TypeClientEnum::tryFrom(Redis::get($key));
+
+            if ($typeClient === TypeClientEnum::FOP){
+                $agreementDTO->setMessage(
+                    'Під час заповнення форми, Вам треба буде надати скріни/фото наступних документів:' .PHP_EOL.
+                    '- Витяг з ЄДР'.PHP_EOL.
+                    '- Фото договору оренди або права власності або талон на МАФ,'.PHP_EOL.
+                    'приміщення в яке планується встановлення орендованого обладнання.'.PHP_EOL.
+                    '(особисті данні орендодавця можна приховати/замалювати)'.PHP_EOL.PHP_EOL.
+                    'Завантажте витяг з ЄДР 📎'
+
+                );
+                $agreementDTO->setReplyMarkup($this->replyMarkup());
+            }
+
+            if ($typeClient === TypeClientEnum::FO){
+                $agreementDTO->setMessage(
+                    'Під час заповнення форми, Вам треба буде надати скріни/фото наступних документів:' .PHP_EOL.
+                    '- Паспорт 1 і 2 сторінка'.PHP_EOL.
+                    '- Прописка або витяг промісце реєстрації'.PHP_EOL.
+                    '- Фото договору оренди або права власності або талон на МАФ,'.PHP_EOL.
+                    'приміщення в яке планується встановлення орендованого обладнання.'.PHP_EOL.
+                    '(особисті данні орендодавця можна приховати/замалювати)'.PHP_EOL.PHP_EOL.
+                    'Завантажте фото першої сторінки паспорту 📎'
+                );
+                $agreementDTO->setReplyMarkup($this->replyMarkup());
+            }
+
+            return $agreementDTO;
+        }
 
         if (Redis::exists($key) == true){
 
@@ -56,6 +109,7 @@ class ClientTypeHandler implements AgreementInterface
             return $agreementDTO;
         }
         Redis::set($key, $agreementDTO->getMessage(), 'EX', 260000);
+        Redis::set($agreementDTO->getSenderId(), 2);
 
         if ($agreementDTO->getMessage() === TypeClientEnum::FOP->value){
             $agreementDTO->setMessage(
@@ -67,6 +121,7 @@ class ClientTypeHandler implements AgreementInterface
                 'Завантажте витяг з ЄДР 📎'
 
             );
+            $agreementDTO->setReplyMarkup($this->replyMarkup());
         }
 
         if ($agreementDTO->getMessage() === TypeClientEnum::FO->value){
@@ -79,8 +134,28 @@ class ClientTypeHandler implements AgreementInterface
                 '(особисті данні орендодавця можна приховати/замалювати)'.PHP_EOL.PHP_EOL.
                 'Завантажте фото першої сторінки паспорту 📎'
             );
+            $agreementDTO->setReplyMarkup($this->replyMarkup());
         }
 
         return $agreementDTO;
+    }
+    private function replyMarkup(): array
+    {
+        return
+            [
+                'keyboard' =>
+                    [
+                        [ //строка
+                            [ //кнопка
+                                'text' => TelegramCommandEnum::returnMain->value,
+                            ],
+                            [ //кнопка
+                                'text' => TelegramCommandEnum::agreementBack->value,
+                            ],
+                        ],
+                    ],
+                'one_time_keyboard' => true,
+                'resize_keyboard' => true,
+            ];
     }
 }

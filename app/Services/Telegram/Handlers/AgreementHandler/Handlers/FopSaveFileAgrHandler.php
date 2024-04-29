@@ -3,6 +3,7 @@
 namespace App\Services\Telegram\Handlers\AgreementHandler\Handlers;
 
 use App\Enums\FilesDownloadEnum;
+use App\Enums\TelegramCommandEnum;
 use App\Enums\TypeClientEnum;
 use App\Services\Telegram\Handlers\AgreementHandler\AgreementInterface;
 use App\Services\Telegram\Handlers\AgreementHandler\DTO\AgreementDTO;
@@ -12,18 +13,19 @@ use Illuminate\Support\Facades\Redis;
 class FopSaveFileAgrHandler implements AgreementInterface
 {
     public const SAVE_FILE_FOP_AGR = '_FOP_AGR_FILE';
-    public const MEDIA_FILE_AGR_EDR = '_MEDIA_FILE_AGR_EDR';
+    public const MEDIA_FILE_FOP_AGR = '_MEDIA_FILE_FOP_AGR';
 
     public function handle(AgreementDTO $agreementDTO, Closure $next): AgreementDTO
     {
         if ($agreementDTO->getMediaGroupId() != 0){
-            Redis::set($agreementDTO->getSenderId() . self::MEDIA_FILE_AGR_EDR, 'check' , 'EX', 260000);
+            Redis::set($agreementDTO->getSenderId() . self::MEDIA_FILE_FOP_AGR, 'check' , 'EX', 260000);
         }
         $key = $agreementDTO->getSenderId() . self::SAVE_FILE_FOP_AGR;
 
         if ($agreementDTO->getClientAgreementDTO()->getType() === TypeClientEnum::FO){
             return $next($agreementDTO);
         }
+
 
         if (Redis::exists($key) == true){
 
@@ -39,7 +41,6 @@ class FopSaveFileAgrHandler implements AgreementInterface
             );
 
             return $agreementDTO;
-
         }
 
         Redis::set($key, json_encode(['0' => $agreementDTO->getFileName()]), 'EX', 260000);
@@ -62,7 +63,6 @@ class FopSaveFileAgrHandler implements AgreementInterface
                         [ //кнопка
                             'text' => FilesDownloadEnum::NO->value,
                         ],
-
                     ],
                 ],
             'one_time_keyboard' => true,

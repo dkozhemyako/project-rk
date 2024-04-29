@@ -3,6 +3,7 @@
 namespace App\Services\Telegram\Handlers\AgreementHandler\Handlers;
 
 use App\Enums\FilesDownloadEnum;
+use App\Enums\TelegramCommandEnum;
 use App\Enums\TypeClientEnum;
 use App\Services\Telegram\Handlers\AgreementHandler\AgreementInterface;
 use App\Services\Telegram\Handlers\AgreementHandler\DTO\AgreementDTO;
@@ -18,6 +19,21 @@ class CheckSaveFileAgrHandler implements AgreementInterface
     {
 
         $key = $agreementDTO->getSenderId() . self::CHECK_SAVE_FILE_FOP_AGR;
+
+        if (Redis::get($agreementDTO->getSenderId()) == 5
+            && $agreementDTO->getMessage() == TelegramCommandEnum::agreementBack->value)
+        {
+            Redis::del(
+                $agreementDTO->getSenderId() . AgreementStartDateClient::AGR_START_DATE_CLIENT,
+            );
+            Redis::set($agreementDTO->getSenderId(), 4);
+
+            $agreementDTO->setMessage(
+                '💬 Вкажіть бажану дату встановлення обладнання в форматі 01.01.2023'
+            );
+            $agreementDTO->setReplyMarkup($this->replyMarkup(true));
+            return $agreementDTO;
+        }
 
         if (Redis::exists($key) == true){
             if ($agreementDTO->getClientAgreementDTO()->getType() === TypeClientEnum::FOP){
@@ -50,7 +66,9 @@ class CheckSaveFileAgrHandler implements AgreementInterface
             $agreementDTO->setMessage(
                 '💬 Вкажіть бажану дату встановлення обладнання в форматі 01.01.2023'
             );
-            Redis::del($agreementDTO->getSenderId() . FopSaveFileAgrHandler::MEDIA_FILE_AGR_EDR);
+            $agreementDTO->setReplyMarkup($this->replyMarkup(true));
+            Redis::del($agreementDTO->getSenderId() . FopSaveFileAgrHandler::MEDIA_FILE_FOP_AGR);
+            Redis::set($agreementDTO->getSenderId(), 4);
             return $agreementDTO;
         }
 
@@ -58,7 +76,7 @@ class CheckSaveFileAgrHandler implements AgreementInterface
             $agreementDTO->setMessage(
                 'Завантажте додаткові файли договору оренди або права власності або талон на МАФ. 📎 '
             );
-            Redis::del($agreementDTO->getSenderId() . FopSaveFileAgrHandler::MEDIA_FILE_AGR_EDR);
+            Redis::del($agreementDTO->getSenderId() . FopSaveFileAgrHandler::MEDIA_FILE_FOP_AGR);
             return $agreementDTO;
         }
 
@@ -81,7 +99,7 @@ class CheckSaveFileAgrHandler implements AgreementInterface
         $data[] = $agreementDTO->getFileName();
         Redis::set($redisKey, json_encode($data), 'EX', 260000);
 
-        if (Redis::exists($agreementDTO->getSenderId() . FopSaveFileAgrHandler::MEDIA_FILE_AGR_EDR) == false){
+        if (Redis::exists($agreementDTO->getSenderId() . FopSaveFileAgrHandler::MEDIA_FILE_FOP_AGR) == false){
             $agreementDTO->setMessage(
                 'Бажаєте завантажити додаткові фото договору оренди або права власності або талон на МАФ? 📎'
             );
@@ -97,8 +115,25 @@ class CheckSaveFileAgrHandler implements AgreementInterface
         return $agreementDTO;
     }
 
-    private function replyMarkup(): array
+    private function replyMarkup(bool $value = false): array
     {
+        if ($value === true){
+            return [
+                'keyboard' =>
+                    [
+                        [ //строка
+                            [ //кнопка
+                                'text' => TelegramCommandEnum::returnMain->value,
+                            ],
+                            [ //кнопка
+                                'text' => TelegramCommandEnum::agreementBack->value,
+                            ],
+                        ],
+                    ],
+                'one_time_keyboard' => true,
+                'resize_keyboard' => true,
+            ];
+        }
         return [
             'keyboard' =>
                 [

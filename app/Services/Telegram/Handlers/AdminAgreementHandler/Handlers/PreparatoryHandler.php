@@ -23,8 +23,22 @@ class PreparatoryHandler implements AdminAgreementInterface
 
 
         $key = $adminAgreementDTO->getSenderId() . self::KEY_ADMIN_CALLBACK;
+        if ($adminAgreementDTO->getMessage() === TelegramCommandEnum::agreementAdminBack->value
+            && Redis::get($adminAgreementDTO->getSenderId() . '_admin') == 1)
+        {
+            Redis::del(
+                $adminAgreementDTO->getSenderId() . '_admin',
+                $adminAgreementDTO->getSenderId() . AdminAgreementStartDateHandler::AGR_START_DATE_ADMIN,
+                $adminAgreementDTO->getSenderId() . AdminAgreementStartDateHandler::AGR_EQ_TYPE_ADMIN,
+            );
 
-        if($adminAgreementDTO->getMessage() === TelegramCommandEnum::adminAgreement->value){
+            $message = 'Вкажіть дату встановлення обладнання в форматі 01.01.2023';
+            $adminAgreementDTO->setMessage($message);
+            return $adminAgreementDTO;
+        }
+
+        if($adminAgreementDTO->getMessage() === TelegramCommandEnum::adminAgreement->value
+        ){
 
             $checkId = $this->repository->checkId($adminAgreementDTO->getCallback());
             if ($checkId->getId() === null){
@@ -44,6 +58,7 @@ class PreparatoryHandler implements AdminAgreementInterface
             $senderId = $adminAgreementDTO->getSenderId();
 
                 Redis::del(
+                    $senderId . '_admin',
                     $senderId . $key,
                     $senderId . AdminAgreementStartDateHandler::AGR_START_DATE_ADMIN,
                     $senderId . AdminAgreementEquipmentModelHandler::AGR_EQUIP_MODEL_ADMIN,
@@ -65,7 +80,6 @@ class PreparatoryHandler implements AdminAgreementInterface
 
 
             Redis::set($key, $adminAgreementDTO->getCallback(), 'EX', 260000);
-
 
             $message = 'Для продовження формування договору необхідна буде наступна інформація по обладнанню:' . PHP_EOL;
             $message .= '- дата встановлення'. PHP_EOL;

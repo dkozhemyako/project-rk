@@ -5,6 +5,7 @@ namespace App\Services\Telegram\Handlers\AdminAgreementHandler\Handlers;
 
 
 use App\Enums\EqTypeClientEnum;
+use App\Enums\TelegramCommandEnum;
 use App\Services\Telegram\Handlers\AdminAgreementHandler\AdminAgreementInterface;
 use App\Services\Telegram\Handlers\AdminAgreementHandler\DTO\AdminAgreementDTO;
 use Closure;
@@ -23,7 +24,11 @@ class AdminAgreementEquipmentModelHandler implements AdminAgreementInterface
                         [ //кнопка
                             'text' => 'не було у використанні',
                         ],
-
+                    ],
+                    [ //строка
+                        [ //кнопка
+                            'text' => TelegramCommandEnum::agreementAdminBack->value,
+                        ],
                     ],
                 ],
             'one_time_keyboard' => true,
@@ -38,6 +43,24 @@ class AdminAgreementEquipmentModelHandler implements AdminAgreementInterface
 
         if ($adminAgreementDTO->getEqType() == EqTypeClientEnum::KK->value){
             return $next($adminAgreementDTO);
+        }
+
+        if ($adminAgreementDTO->getMessage() === TelegramCommandEnum::agreementAdminBack->value
+            && Redis::get($adminAgreementDTO->getSenderId() . '_admin') == 3)
+        {
+            Redis::del(
+                $adminAgreementDTO->getSenderId() . AdminAgreementEquipmentConditionHandler::AGR_EQUIP_CONDITION_ADMIN,
+            );
+
+            Redis::set($adminAgreementDTO->getSenderId() . '_admin', 2);
+
+            $adminAgreementDTO->setMessage(
+                'Оберіть стан холодильної вітрини 👇'
+            );
+
+            $adminAgreementDTO->setReplyMarkup($this->replyMarkup);
+
+            return $adminAgreementDTO;
         }
 
         if (Redis::exists($key) == true){
@@ -62,6 +85,7 @@ class AdminAgreementEquipmentModelHandler implements AdminAgreementInterface
         }
 
         Redis::set($key, $adminAgreementDTO->getMessage(), 'EX', 260000);
+        Redis::set($adminAgreementDTO->getSenderId() . '_admin', 2);
 
         $adminAgreementDTO->setMessage(
             'Оберіть стан холодильної вітрини 👇'
@@ -71,4 +95,5 @@ class AdminAgreementEquipmentModelHandler implements AdminAgreementInterface
 
         return $adminAgreementDTO;
     }
+
 }

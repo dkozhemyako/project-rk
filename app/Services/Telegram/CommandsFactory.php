@@ -32,8 +32,8 @@ class CommandsFactory
     {
         return match ($commandEnum) {
             TelegramCommandEnum::start, TelegramCommandEnum::returnMain => app(StartHandler::class),
-            TelegramCommandEnum::agreement => app(AgreementHandler::class),
-            TelegramCommandEnum::adminAgreement =>app(AdminAgreementHandler::class),
+            TelegramCommandEnum::agreement, TelegramCommandEnum::agreementBack  => app(AgreementHandler::class),
+            TelegramCommandEnum::adminAgreement, TelegramCommandEnum::agreementAdminBack =>app(AdminAgreementHandler::class),
             TelegramCommandEnum::clientAgreement =>app(ClientAgreementHandler::class),
             TelegramCommandEnum::equipment, TelegramCommandEnum::equipmentBack => app(EquipmentHandler::class),
             TelegramCommandEnum::equipmentCm, TelegramCommandEnum::coffeeMachineBack => app(CoffeeMachineHandler::class),

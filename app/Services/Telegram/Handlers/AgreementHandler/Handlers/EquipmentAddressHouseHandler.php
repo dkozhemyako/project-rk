@@ -2,6 +2,7 @@
 
 namespace App\Services\Telegram\Handlers\AgreementHandler\Handlers;
 
+use App\Enums\TelegramCommandEnum;
 use App\Services\Telegram\Handlers\AgreementHandler\AgreementInterface;
 use App\Services\Telegram\Handlers\AgreementHandler\DTO\AgreementDTO;
 use Closure;
@@ -28,9 +29,30 @@ class EquipmentAddressHouseHandler implements AgreementInterface
         }
 
         Redis::set($key, $agreementDTO->getMessage(), 'EX', 260000);
+        Redis::set($agreementDTO->getSenderId(), 19);
         $agreementDTO->setMessage(
             '💬 Вкажіть додаткові примітки розташування обладнання, поверх, площу, тип приміщення.'
         );
+        $agreementDTO->setReplyMarkup($this->replyMarkup());
         return $agreementDTO;
+    }
+
+    private function replyMarkup(): array
+    {
+        return [
+            'keyboard' =>
+                [
+                    [ //строка
+                        [ //кнопка
+                            'text' => TelegramCommandEnum::returnMain->value,
+                        ],
+                        [ //кнопка
+                            'text' => TelegramCommandEnum::agreementBack->value,
+                        ],
+                    ],
+                ],
+            'one_time_keyboard' => true,
+            'resize_keyboard' => true,
+        ];
     }
 }

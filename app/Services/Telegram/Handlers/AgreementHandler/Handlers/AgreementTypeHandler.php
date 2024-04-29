@@ -24,7 +24,14 @@ class AgreementTypeHandler implements AgreementInterface
                         [ //кнопка
                             'text' => '👨‍💼 Фізична особa',
                         ],
-
+                    ],
+                    [ //строка
+                        [ //кнопка
+                            'text' => TelegramCommandEnum::returnMain->value,
+                        ],
+                        [ //кнопка
+                            'text' => TelegramCommandEnum::agreementBack->value,
+                        ],
                     ],
                 ],
             'one_time_keyboard' => true,
@@ -33,9 +40,22 @@ class AgreementTypeHandler implements AgreementInterface
 
     public function handle(AgreementDTO $agreementDTO, Closure $next): AgreementDTO
     {
+        if (Redis::get($agreementDTO->getSenderId()) == 2
+            && $agreementDTO->getMessage() == TelegramCommandEnum::agreementBack->value)
+        {
+            Redis::del($agreementDTO->getSenderId() . ClientTypeHandler::AGR_STAGE_CLIENT_TYPE);
+            Redis::set($agreementDTO->getSenderId(), 1);
+            $message = 'Для формування договору, нам необхідно отримати інформацію про орендаря.' . PHP_EOL;
+            $message .= 'Оберіть організаційно-правову форму 👇';
+
+            $agreementDTO->setMessage($message);
+            $agreementDTO->setReplyMarkup($this->replyMarkup);
+            return $agreementDTO;
+        }
+
         $key = $agreementDTO->getSenderId() . self::AGR_STAGE_AGR_TYPE;
 
-        if (Redis::exists($key) == true){
+        if (Redis::exists($key) == true ){
 
             return $next($agreementDTO);
         }
@@ -48,8 +68,9 @@ class AgreementTypeHandler implements AgreementInterface
             $agreementDTO->setReplyMarkup($this->replyMarkup());
             return $agreementDTO;
         }
-        Redis::set($key, $agreementDTO->getMessage(), 'EX', 260000);
 
+        Redis::set($key, $agreementDTO->getMessage(), 'EX', 260000);
+        Redis::set($agreementDTO->getSenderId(), 1);
         $message = 'Для формування договору, нам необхідно отримати інформацію про орендаря.' . PHP_EOL;
         $message .= 'Оберіть організаційно-правову форму 👇';
 
@@ -66,12 +87,20 @@ class AgreementTypeHandler implements AgreementInterface
                     [
                         [ //строка
                             [ //кнопка
-                                'text' => '👨‍💻 Фізична особа-підприємець',
+                                'text' => EqTypeClientEnum::HV->value,
                             ],
                             [ //кнопка
-                                'text' => '👨‍💼 Фізична особа',
+                                'text' => EqTypeClientEnum::KK->value,
                             ],
 
+                        ],
+                        [ //строка
+                            [ //кнопка
+                                'text' => EqTypeClientEnum::PACK->value,
+                            ],
+                            [ //кнопка
+                                'text' => TelegramCommandEnum::returnMain->value,
+                            ],
                         ],
                     ],
                 'one_time_keyboard' => true,
