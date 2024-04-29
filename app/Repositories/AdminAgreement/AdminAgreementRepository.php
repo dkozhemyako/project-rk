@@ -14,8 +14,9 @@ class AdminAgreementRepository
     public function store(AdminAgreementDTO $dto): void
     {
         DB::table('admin_agreements')
-            ->insert([
-                'id' => $dto->getCallback(),
+            ->updateOrInsert(
+                ['id' => $dto->getCallback()],
+                [
                 'created_at' => Carbon::createFromTimestamp(time()),
                 'date_from_admin' => $dto->getDateFromAdmin(),
                 'equipment_condition' => $dto->getEquipmentCondition()->name,
@@ -28,9 +29,9 @@ class AdminAgreementRepository
                 'cg_model' => $dto->getEquipmentModelCoffeeGrinder(),
                 'cg_cost' => $dto->getEquipmentCostCoffeeGrinder(),
                 'cg_condition' => $dto->getEquipmentConditionCoffeeGrinder()->name,
-
                 'file_agreement' => $dto->getFileAgreementAdmin(),
-            ]);
+            ],
+            );
     }
 
     public function updateSignedAgreement(int $id, string $fileName): void

@@ -5,6 +5,7 @@ namespace App\Services\Telegram\Handlers\AdminAgreementHandler\Handlers;
 
 
 use App\Enums\EqTypeClientEnum;
+use App\Enums\TelegramCommandEnum;
 use App\Repositories\AdminAgreement\AdminAgreementRepository;
 use App\Services\Telegram\Handlers\AdminAgreementHandler\AdminAgreementInterface;
 use App\Services\Telegram\Handlers\AdminAgreementHandler\DTO\AdminAgreementDTO;
@@ -25,6 +26,39 @@ class AdminAgreementStartDateHandler implements AdminAgreementInterface
     {
         $key = $adminAgreementDTO->getSenderId() . self::AGR_START_DATE_ADMIN;
         $keyEqType = $adminAgreementDTO->getSenderId() . self::AGR_EQ_TYPE_ADMIN;
+
+        if ($adminAgreementDTO->getMessage() === TelegramCommandEnum::agreementAdminBack->value
+            && Redis::get($adminAgreementDTO->getSenderId() . '_admin') == 2
+            ||
+            $adminAgreementDTO->getMessage() === TelegramCommandEnum::agreementAdminBack->value
+            && Redis::get($adminAgreementDTO->getSenderId() . '_admin') == 5
+        )
+        {
+            Redis::del(
+                $adminAgreementDTO->getSenderId() . AdminAgreementEquipmentModelHandler::AGR_EQUIP_MODEL_ADMIN,
+                $adminAgreementDTO->getSenderId() . AdminAgreementCoffeeMachineModelHandler::AGR_CM_MODEL_ADMIN,
+            );
+
+            Redis::set($adminAgreementDTO->getSenderId() . '_admin', 1);
+
+            $clientAgreementData = $this->adminAgreementRepository->getClientAgreementData($adminAgreementDTO->getCallback());
+            if($clientAgreementData->getEqType() == EqTypeClientEnum::HV->value || $clientAgreementData->getEqType() == EqTypeClientEnum::PACK->value){
+                $adminAgreementDTO->setMessage(
+                    'Вкажіть модель холодильної вітрини.'
+                );
+                $adminAgreementDTO->setReplyMarkup($this->replyMarkup());
+                return $adminAgreementDTO;
+            }
+
+            if($clientAgreementData->getEqType() == EqTypeClientEnum::KK->value){
+                $adminAgreementDTO->setMessage(
+                    'Вкажіть модель кавоварки.'
+                );
+                $adminAgreementDTO->setReplyMarkup($this->replyMarkup());
+                return $adminAgreementDTO;
+            }
+
+        }
 
         if (Redis::exists($key) == true){
 
@@ -87,13 +121,16 @@ class AdminAgreementStartDateHandler implements AdminAgreementInterface
 
         Redis::set($key, $adminAgreementDTO->getMessage(), 'EX', 260000);
 
+
         $clientAgreementData = $this->adminAgreementRepository->getClientAgreementData($adminAgreementDTO->getCallback());
         Redis::set($keyEqType, $clientAgreementData->getEqType(), 'EX', 260000);
+        Redis::set($adminAgreementDTO->getSenderId() . '_admin', 1);
 
         if($clientAgreementData->getEqType() == EqTypeClientEnum::HV->value || $clientAgreementData->getEqType() == EqTypeClientEnum::PACK->value){
             $adminAgreementDTO->setMessage(
                 'Вкажіть модель холодильної вітрини.'
             );
+            $adminAgreementDTO->setReplyMarkup($this->replyMarkup());
             return $adminAgreementDTO;
         }
 
@@ -101,8 +138,25 @@ class AdminAgreementStartDateHandler implements AdminAgreementInterface
             $adminAgreementDTO->setMessage(
                 'Вкажіть модель кавоварки.'
             );
+            $adminAgreementDTO->setReplyMarkup($this->replyMarkup());
             return $adminAgreementDTO;
         }
 
+    }
+
+    private function replyMarkup(): array
+    {
+        return [
+            'keyboard' =>
+                [
+                    [ //строка
+                        [ //кнопка
+                            'text' => TelegramCommandEnum::agreementAdminBack->value,
+                        ],
+                    ],
+                ],
+            'one_time_keyboard' => true,
+            'resize_keyboard' => true,
+        ];
     }
 }

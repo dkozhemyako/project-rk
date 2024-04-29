@@ -39,6 +39,7 @@ class AdminAgreementEquipmentRentCostHandler implements AdminAgreementInterface
         }
 
         Redis::set($key, $adminAgreementDTO->getMessage(), 'EX', 260000);
+        Redis::set($adminAgreementDTO->getSenderId() . '_admin', 11);
         $adminAgreementDTO->setEquipmentRentalCost(Redis::get($key));
 
         return $next($adminAgreementDTO);

@@ -29,6 +29,9 @@ class PreparatoryHandler implements AgreementInterface
                         [ //кнопка
                             'text' => EqTypeClientEnum::PACK->value,
                         ],
+                        [ //кнопка
+                            'text' => TelegramCommandEnum::returnMain->value,
+                        ],
                     ],
                 ],
             'one_time_keyboard' => true,
@@ -38,11 +41,16 @@ class PreparatoryHandler implements AgreementInterface
 
     public function handle(AgreementDTO $agreementDTO, Closure $next): AgreementDTO
     {
-        if($agreementDTO->getMessage() === TelegramCommandEnum::agreement->value){
+
+        if($agreementDTO->getMessage() === TelegramCommandEnum::agreement->value
+            || Redis::get($agreementDTO->getSenderId()) == 1
+            && $agreementDTO->getMessage() === TelegramCommandEnum::agreementBack->value)
+        {
 
             $senderId = $agreementDTO->getSenderId();
 
                 Redis::del(
+                    $senderId,
                     $senderId . AgreementTypeHandler::AGR_STAGE_AGR_TYPE,
                     $senderId . ClientTypeHandler::AGR_STAGE_CLIENT_TYPE,
                     $senderId . FopSaveFileEdrHandler::SAVE_FILE_FOP_EDR,

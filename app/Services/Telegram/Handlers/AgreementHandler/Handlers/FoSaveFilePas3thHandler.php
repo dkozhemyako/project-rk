@@ -2,6 +2,7 @@
 
 namespace App\Services\Telegram\Handlers\AgreementHandler\Handlers;
 
+use App\Enums\TelegramCommandEnum;
 use App\Enums\TypeClientEnum;
 use App\Services\Telegram\Handlers\AgreementHandler\AgreementInterface;
 use App\Services\Telegram\Handlers\AgreementHandler\DTO\AgreementDTO;
@@ -20,6 +21,23 @@ class FoSaveFilePas3thHandler implements AgreementInterface
             return $next($agreementDTO);
         }
 
+        if (Redis::get($agreementDTO->getSenderId()) == 4
+            && $agreementDTO->getMessage() == TelegramCommandEnum::agreementBack->value) {
+            Redis::del(
+                $agreementDTO->getSenderId() . FoSaveFilePasAgrHandler::SAVE_FILE_FO_AGR,
+                $agreementDTO->getSenderId() . CheckSaveFileAgrHandler::CHECK_SAVE_FILE_FOP_AGR,
+            );
+            Redis::set($agreementDTO->getSenderId(), 101);
+
+            $agreementDTO->setMessage(
+                'Завантажте фото договору оренди або права власності або талон на МАФ. 📎'
+            );
+            $agreementDTO->setReplyMarkup($this->replyMarkup());
+
+            return $agreementDTO;
+
+        }
+
         if (Redis::exists($key) == true){
 
             return $next($agreementDTO);
@@ -35,14 +53,35 @@ class FoSaveFilePas3thHandler implements AgreementInterface
         }
 
         Redis::set($key, $agreementDTO->getFileName(), 'EX', 260000);
+        Redis::set($agreementDTO->getSenderId(), 101);
 
         $agreementDTO->setMessage(
             'Завантажте фото договору оренди або права власності або талон на МАФ. 📎'
         );
+        $agreementDTO->setReplyMarkup($this->replyMarkup());
 
         return $agreementDTO;
 
 
 
+    }
+
+    private function replyMarkup(): array
+    {
+        return [
+            'keyboard' =>
+                [
+                    [ //строка
+                        [ //кнопка
+                            'text' => TelegramCommandEnum::returnMain->value,
+                        ],
+                        [ //кнопка
+                            'text' => TelegramCommandEnum::agreementBack->value,
+                        ],
+                    ],
+                ],
+            'one_time_keyboard' => true,
+            'resize_keyboard' => true,
+        ];
     }
 }

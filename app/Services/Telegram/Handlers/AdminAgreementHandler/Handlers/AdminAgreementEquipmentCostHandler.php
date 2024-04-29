@@ -6,6 +6,7 @@ namespace App\Services\Telegram\Handlers\AdminAgreementHandler\Handlers;
 
 use App\Enums\EqTypeClientEnum;
 use App\Enums\EquipmentConditionEnum;
+use App\Enums\TelegramCommandEnum;
 use App\Services\Telegram\Handlers\AdminAgreementHandler\AdminAgreementInterface;
 use App\Services\Telegram\Handlers\AdminAgreementHandler\DTO\AdminAgreementDTO;
 use Closure;
@@ -22,6 +23,43 @@ class AdminAgreementEquipmentCostHandler implements AdminAgreementInterface
 
         if ($adminAgreementDTO->getEqType() == EqTypeClientEnum::KK->value){
             return $next($adminAgreementDTO);
+        }
+
+        if ($adminAgreementDTO->getMessage() === TelegramCommandEnum::agreementAdminBack->value
+            && Redis::get($adminAgreementDTO->getSenderId() . '_admin') == 5
+            || $adminAgreementDTO->getMessage() === TelegramCommandEnum::agreementAdminBack->value
+            && Redis::get($adminAgreementDTO->getSenderId() . '_admin') == 11
+            && $adminAgreementDTO->getEqType() == EqTypeClientEnum::HV->value
+        )
+        {
+            Redis::del(
+                $adminAgreementDTO->getSenderId() . AdminAgreementCoffeeMachineModelHandler::AGR_CM_MODEL_ADMIN,
+
+                $adminAgreementDTO->getSenderId() . AdminAgreementEquipmentRentCostHandler::AGR_EQUIP_RENT_COST_ADMIN,
+                $adminAgreementDTO->getSenderId() . CreateAdminAgreementHandler::AGR_CREATE_ADMIN,
+                $adminAgreementDTO->getSenderId() . StoreAdminAgreementHandler::AGR_STORE_ADMIN,
+                $adminAgreementDTO->getSenderId() . GetAdminDraftAgreementHandler::AGR_DRAFT_ADMIN,
+            );
+
+            Redis::set($adminAgreementDTO->getSenderId() . '_admin', 4);
+
+            if ($adminAgreementDTO->getEqType() == EqTypeClientEnum::HV->value){
+                $adminAgreementDTO->setMessage(
+                    'Вкажіть вартість оренди комплекту обладнання (тільки цифри, наприклад 1000)'
+                );
+                $adminAgreementDTO->setReplyMarkup($this->replyMarkup());
+
+                return $adminAgreementDTO;
+            }
+
+            if ($adminAgreementDTO->getEqType() == EqTypeClientEnum::PACK->value){
+                $adminAgreementDTO->setMessage(
+                    'Вкажіть модель кавоварки.'
+                );
+                $adminAgreementDTO->setReplyMarkup($this->replyMarkup());
+                return $adminAgreementDTO;
+            }
+
         }
 
         if (Redis::exists($key) == true){
@@ -47,11 +85,13 @@ class AdminAgreementEquipmentCostHandler implements AdminAgreementInterface
         }
 
         Redis::set($key, $adminAgreementDTO->getMessage(), 'EX', 260000);
+        Redis::set($adminAgreementDTO->getSenderId() . '_admin', 4);
 
         if ($adminAgreementDTO->getEqType() == EqTypeClientEnum::HV->value){
             $adminAgreementDTO->setMessage(
                 'Вкажіть вартість оренди комплекту обладнання (тільки цифри, наприклад 1000)'
             );
+            $adminAgreementDTO->setReplyMarkup($this->replyMarkup());
 
             return $adminAgreementDTO;
         }
@@ -60,9 +100,25 @@ class AdminAgreementEquipmentCostHandler implements AdminAgreementInterface
             $adminAgreementDTO->setMessage(
                 'Вкажіть модель кавоварки.'
             );
-
+            $adminAgreementDTO->setReplyMarkup($this->replyMarkup());
             return $adminAgreementDTO;
         }
 
+    }
+
+    private function replyMarkup(): array
+    {
+        return [
+            'keyboard' =>
+                [
+                    [ //строка
+                        [ //кнопка
+                            'text' => TelegramCommandEnum::agreementAdminBack->value,
+                        ],
+                    ],
+                ],
+            'one_time_keyboard' => true,
+            'resize_keyboard' => true,
+        ];
     }
 }

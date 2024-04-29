@@ -14,6 +14,8 @@ enum TelegramCommandEnum: string
     case returnMain = '⬆ На головну';
     case equipmentWait = '⬜ Очікується';
     case equipmentBack = '⬅ Повернутись назад';
+    case agreementBack = '⬅ Попередній крок';
+    case agreementAdminBack = '↖ Попередній крок';
     case coffeeMachineBack = '↖ Повернутись назад';
     case coffeeGrinderBack = '↗ Повернутись назад';
     case equipmentFrosty75l = '™ Frosty 78L';

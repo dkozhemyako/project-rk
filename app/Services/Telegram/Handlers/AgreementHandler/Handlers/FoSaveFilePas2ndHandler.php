@@ -2,6 +2,7 @@
 
 namespace App\Services\Telegram\Handlers\AgreementHandler\Handlers;
 
+use App\Enums\TelegramCommandEnum;
 use App\Enums\TypeClientEnum;
 use App\Services\Telegram\Handlers\AgreementHandler\AgreementInterface;
 use App\Services\Telegram\Handlers\AgreementHandler\DTO\AgreementDTO;
@@ -20,6 +21,20 @@ class FoSaveFilePas2ndHandler implements AgreementInterface
             return $next($agreementDTO);
         }
 
+        if (Redis::get($agreementDTO->getSenderId()) == 101
+            && $agreementDTO->getMessage() == TelegramCommandEnum::agreementBack->value) {
+            Redis::del(
+                $agreementDTO->getSenderId() . FoSaveFilePas3thHandler::SAVE_FILE_FO_PAS_3TH,
+            );
+            Redis::set($agreementDTO->getSenderId(), 100);
+
+            $agreementDTO->setMessage(
+                'Завантажте фото прописки з паспорту або фото витягу про місце реєстрації 📎'
+            );
+            $agreementDTO->setReplyMarkup($this->replyMarkup());
+            return $agreementDTO;
+        }
+
         if (Redis::exists($key) == true){
 
             return $next($agreementDTO);
@@ -35,14 +50,34 @@ class FoSaveFilePas2ndHandler implements AgreementInterface
         }
 
         Redis::set($key, $agreementDTO->getFileName(), 'EX', 260000);
+        Redis::set($agreementDTO->getSenderId(), 100);
 
         $agreementDTO->setMessage(
             'Завантажте фото прописки з паспорту або фото витягу про місце реєстрації 📎'
         );
-
+        $agreementDTO->setReplyMarkup($this->replyMarkup());
         return $agreementDTO;
 
 
 
+    }
+
+    private function replyMarkup(): array
+    {
+        return [
+            'keyboard' =>
+                [
+                    [ //строка
+                        [ //кнопка
+                            'text' => TelegramCommandEnum::returnMain->value,
+                        ],
+                        [ //кнопка
+                            'text' => TelegramCommandEnum::agreementBack->value,
+                        ],
+                    ],
+                ],
+            'one_time_keyboard' => true,
+            'resize_keyboard' => true,
+        ];
     }
 }

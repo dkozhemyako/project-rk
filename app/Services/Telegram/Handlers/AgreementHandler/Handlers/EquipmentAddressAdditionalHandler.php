@@ -60,18 +60,17 @@ class EquipmentAddressAdditionalHandler implements AgreementInterface
 
     private function replyMarkup(): array
     {
-        return
-            [
-                'keyboard' =>
-                    [
-                        [ //строка
-                            [ //кнопка
-                                'text' => TelegramCommandEnum::returnMain->value,
-                            ],
+        return [
+            'keyboard' =>
+                [
+                    [ //строка
+                        [ //кнопка
+                            'text' => TelegramCommandEnum::returnMain->value,
                         ],
                     ],
-                'one_time_keyboard' => true,
-                'resize_keyboard' => true,
-            ];
+                ],
+            'one_time_keyboard' => true,
+            'resize_keyboard' => true,
+        ];
     }
 }
