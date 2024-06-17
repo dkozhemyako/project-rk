@@ -5,7 +5,7 @@ namespace App\Repositories\AdminAgreement;
 class AdminInfoForFilesIterator
 {
     protected string $equipment_condition;
-    protected string $equipment_model;
+    protected ? string $equipment_model;
     protected ? string $file_draft_agreement = null;
     protected ? string $file_agreement = null;
     protected ? string $file_signed_agreement = null;
