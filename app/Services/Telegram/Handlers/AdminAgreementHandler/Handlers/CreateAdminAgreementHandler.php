@@ -143,7 +143,7 @@ class CreateAdminAgreementHandler implements AdminAgreementInterface
                 $document->setValue('equipStreet', $clientAgreementData->getEquipStreet());
                 $document->setValue('equipHouse', $clientAgreementData->getEquipHouse());
                 $document->setValue('equipAdditional', $clientAgreementData->getEquipAddressAdd());
-                $document->setValue('passportNumber', $clientAgreementData->getPassportDate());
+                $document->setValue('passportNumber', $clientAgreementData->getPassportSeriesNumber());
                 $document->setValue('passportIssue', $clientAgreementData->getPassportIssue());
                 $document->setValue('passportDate', $clientAgreementData->getPassportDate());
                 $document->setValue('phone', $phone);

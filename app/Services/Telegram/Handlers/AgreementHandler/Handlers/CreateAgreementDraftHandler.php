@@ -96,9 +96,7 @@ class CreateAgreementDraftHandler implements AgreementInterface
                 $document->setValue('equipStreet', $agreementDTO->getClientAgreementDTO()->getEquipStreet());
                 $document->setValue('equipHouse', $agreementDTO->getClientAgreementDTO()->getEquipHouse());
                 $document->setValue('equipAdditional', $agreementDTO->getClientAgreementDTO()->getEquipAddressAdd());
-                $document->setValue(
-                    'passportNumber',
-                    $agreementDTO->getClientAgreementDTO()->getPassportSeriesNumber()
+                $document->setValue('passportNumber', $agreementDTO->getClientAgreementDTO()->getPassportSeriesNumber()
                 );
                 $document->setValue('passportIssue', $agreementDTO->getClientAgreementDTO()->getPassportIssue());
                 $document->setValue('passportDate', $agreementDTO->getClientAgreementDTO()->getPassportDate());
