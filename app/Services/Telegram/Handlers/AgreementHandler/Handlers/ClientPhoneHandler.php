@@ -7,6 +7,7 @@ use App\Enums\TypeClientEnum;
 use App\Services\Telegram\Handlers\AgreementHandler\AgreementInterface;
 use App\Services\Telegram\Handlers\AgreementHandler\DTO\AgreementDTO;
 use Closure;
+use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redis;
 
@@ -14,7 +15,9 @@ class ClientPhoneHandler implements AgreementInterface
 {
     public const AGR_STAGE_CLIENT_PHONE = '_CLIENT_PHONE';
 
-
+    public function __construct(
+        protected Client $client,
+    ){}
     public function handle(AgreementDTO $agreementDTO, Closure $next): AgreementDTO
     {
         if (Redis::get($agreementDTO->getSenderId()) == 8
@@ -27,7 +30,20 @@ class ClientPhoneHandler implements AgreementInterface
             Redis::set($agreementDTO->getSenderId(), 7);
 
             if (TypeClientEnum::tryFrom(Redis::get($agreementDTO->getSenderId() . ClientTypeHandler::AGR_STAGE_CLIENT_TYPE)) === TypeClientEnum::FOP){
-                $agreementDTO->setMessage('💬 Вкажіть номер запису в ЄДР , має бути 19 або 17 символів');
+
+                $this->client->post(
+                    config('messenger.telegram.url_media_group'),
+                    [
+                        'json' => [
+                            'chat_id' => $agreementDTO->getSenderId(),
+                            'media' => [
+                                ['type' => 'photo', 'media' => config('messenger.telegram.ngrok').'/'. 'ExampleEDR/example.jpg'],
+                            ],
+                        ],
+                    ]
+                );
+
+                $agreementDTO->setMessage('💬 Вкажіть номер запису в ЄДР');
                 $agreementDTO->setReplyMarkup($this->replyMarkup());
                 return $agreementDTO;
             }
@@ -97,7 +113,20 @@ class ClientPhoneHandler implements AgreementInterface
         Redis::set($agreementDTO->getSenderId(), 7);
 
         if ($agreementDTO->getClientAgreementDTO()->getType() === TypeClientEnum::FOP){
-            $agreementDTO->setMessage('💬 Вкажіть номер запису в ЄДР , має бути 19 або 17 символів');
+
+            $this->client->post(
+                config('messenger.telegram.url_media_group'),
+                [
+                    'json' => [
+                        'chat_id' => $agreementDTO->getSenderId(),
+                        'media' => [
+                            ['type' => 'photo', 'media' => config('messenger.telegram.ngrok').'/'. 'ExampleEDR/example.jpg'],
+                        ],
+                    ],
+                ]
+            );
+
+            $agreementDTO->setMessage('💬 Вкажіть номер запису в ЄДР');
             $agreementDTO->setReplyMarkup($this->replyMarkup());
             return $agreementDTO;
         }

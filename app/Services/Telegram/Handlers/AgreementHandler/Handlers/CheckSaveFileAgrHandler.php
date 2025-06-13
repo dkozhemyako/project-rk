@@ -29,7 +29,7 @@ class CheckSaveFileAgrHandler implements AgreementInterface
             Redis::set($agreementDTO->getSenderId(), 4);
 
             $agreementDTO->setMessage(
-                '💬 Вкажіть бажану дату встановлення обладнання в форматі 01.01.2023'
+                '💬 Вкажіть бажану дату встановлення обладнання в форматі 30.12.2025'
             );
             $agreementDTO->setReplyMarkup($this->replyMarkup(true));
             return $agreementDTO;
@@ -64,7 +64,7 @@ class CheckSaveFileAgrHandler implements AgreementInterface
         if ($agreementDTO->getMessage() === FilesDownloadEnum::NO->value){
             Redis::set($key, 'check', 'EX', 260000);
             $agreementDTO->setMessage(
-                '💬 Вкажіть бажану дату встановлення обладнання в форматі 01.01.2023'
+                '💬 Вкажіть бажану дату встановлення обладнання в форматі 30.12.2025'
             );
             $agreementDTO->setReplyMarkup($this->replyMarkup(true));
             Redis::del($agreementDTO->getSenderId() . FopSaveFileAgrHandler::MEDIA_FILE_FOP_AGR);
@@ -74,7 +74,7 @@ class CheckSaveFileAgrHandler implements AgreementInterface
 
         if ($agreementDTO->getMessage() === FilesDownloadEnum::YES->value) {
             $agreementDTO->setMessage(
-                'Завантажте додаткові файли договору оренди або права власності або талон на МАФ. 📎 '
+                'Завантажте додаткові файли договору оренди або права власності приміщення або талон на МАФ. 📎 '
             );
             Redis::del($agreementDTO->getSenderId() . FopSaveFileAgrHandler::MEDIA_FILE_FOP_AGR);
             return $agreementDTO;

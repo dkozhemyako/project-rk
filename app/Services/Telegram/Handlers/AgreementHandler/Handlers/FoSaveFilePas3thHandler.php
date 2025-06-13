@@ -30,7 +30,7 @@ class FoSaveFilePas3thHandler implements AgreementInterface
             Redis::set($agreementDTO->getSenderId(), 101);
 
             $agreementDTO->setMessage(
-                'Завантажте фото договору оренди або права власності або талон на МАФ. 📎'
+                'Завантажте фото договору оренди або права власності приміщення або талон на МАФ. 📎'
             );
             $agreementDTO->setReplyMarkup($this->replyMarkup());
 
@@ -56,7 +56,7 @@ class FoSaveFilePas3thHandler implements AgreementInterface
         Redis::set($agreementDTO->getSenderId(), 101);
 
         $agreementDTO->setMessage(
-            'Завантажте фото договору оренди або права власності або талон на МАФ. 📎'
+            'Завантажте фото договору оренди або права власності приміщення або талон на МАФ. 📎'
         );
         $agreementDTO->setReplyMarkup($this->replyMarkup());
 

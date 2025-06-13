@@ -151,6 +151,42 @@ class AdminAgreementStartDateHandler implements AdminAgreementInterface
                 [
                     [ //строка
                         [ //кнопка
+                            'text' => "Gooder XC68L",
+                        ],
+                        [ //кнопка
+                            'text' => "Reednee RT78L",
+                        ],
+                        [ //кнопка
+                            'text' => "Frosty RT78L",
+                        ],
+                    ],
+                    [ //строка
+                        [ //кнопка
+                            'text' => "Frosty RT98L",
+                        ],
+                        [ //кнопка
+                            'text' => "Reednee RT98L",
+                        ],
+                        [ //кнопка
+                            'text' => "Gooder XCW100L",
+                        ],
+                    ],
+                    [ //строка
+                        [ //кнопка
+                            'text' => "Gooder XCW120LS",
+                        ],
+                        [ //кнопка
+                            'text' => "Gooder XCW120 CUBE",
+                        ],
+                        [ //кнопка
+                            'text' => "Gooder XCW160LS",
+                        ],
+                    ],
+                    [ //строка
+                        [ //кнопка
+                            'text' => "Gooder XCW160 CUBE",
+                        ],
+                        [ //кнопка
                             'text' => TelegramCommandEnum::agreementAdminBack->value,
                         ],
                     ],

@@ -35,8 +35,7 @@ class GetAdminDraftAgreementHandler implements AdminAgreementInterface
         if (Redis::get($key) == 'checked'){
             Log::info(Redis::get($key));
             $adminAgreementDTO->setMessage(
-                '🤦 Адмін частина по заповненню драфту договору цього завдання завершена. При необхідності зверніться до адміністратора.
-                (AdminAgreementHandler)'
+                '🤦 Адмін частина по заповненню драфту договору цього завдання завершена. При необхідності зверніться до адміністратора.'
             );
             return $adminAgreementDTO;
         }
@@ -71,21 +70,17 @@ class GetAdminDraftAgreementHandler implements AdminAgreementInterface
         $message .= 'Будьласка ознайомтесь з договором, перевірте дані. '.PHP_EOL.PHP_EOL;
         $message .= 'Після перевірки підтвердіть, що все добре 👇'.PHP_EOL;
 
-        $dto = new MessageDTO(
-            $message,
-            $clientId,
-        );
-        $dto->setReplyMarkup($this->replyMarkupTrue($adminAgreementDTO->getCallback()));
-        $this->messengerService->send($dto);
 
+
+        /*
         $dtoFalse = new MessageDTO(
             'Або зробіть уточнення при необхідності внесення правок 👇',
             $clientId,
         );
         $dtoFalse->setReplyMarkup($this->replyMarkupFalse($adminAgreementDTO->getCallback()));
         $this->messengerService->send($dtoFalse);
+        */
 
-        //
 
         $arrayQuery = array(
             'chat_id' => $clientId,
@@ -101,6 +96,12 @@ class GetAdminDraftAgreementHandler implements AdminAgreementInterface
         curl_close($ch);
 
         $adminAgreementDTO->setMessage('💬 Договір відправлено клієнту для ознайомлення та перевірки, очікуйте на відповідь.');
+        $dto = new MessageDTO(
+            $message,
+            $clientId,
+        );
+        $dto->setReplyMarkup($this->replyMarkupTrue($adminAgreementDTO->getCallback()));
+        $this->messengerService->send($dto);
 
         Redis::set($key, 'checked', 'EX', 260000);
         return $adminAgreementDTO;
@@ -125,6 +126,20 @@ class GetAdminDraftAgreementHandler implements AdminAgreementInterface
                 'resize_keyboard' => true,
             ];
     }
+
+    private function replyKeyboardTrue(): array
+    {
+        $text = TelegramCommandEnum::clientCheckAgreementTrue->value;
+
+        return [
+            'keyboard' => [
+                [ $text ], // Один рядок, одна кнопка
+            ],
+            'resize_keyboard' => true,       // Зменшує клавіатуру під розмір кнопок
+            'one_time_keyboard' => true,     // Приховає клавіатуру після натискання
+        ];
+    }
+    /*
     private function replyMarkupFalse(int $agreementId): array
     {
         return
@@ -142,4 +157,5 @@ class GetAdminDraftAgreementHandler implements AdminAgreementInterface
                 'resize_keyboard' => true,
             ];
     }
+    */
 }

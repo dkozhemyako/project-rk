@@ -27,10 +27,10 @@ class EquipmentFrostyRT98LCharacteristicsHandler implements CommandsInterface
                     ],
                     [ //строка
                         [ //кнопка
-                            'text' => '⬅ Повернутись назад',
+                            'text' => '⬆ На головну',
                         ],
                         [ //кнопка
-                            'text' => '⬆ На головну',
+                            'text' => '⬅ Повернутись назад',
                         ],
 
 
@@ -57,7 +57,8 @@ class EquipmentFrostyRT98LCharacteristicsHandler implements CommandsInterface
         $message .= 'Корпус: білий пластик'.PHP_EOL;
         $message .= 'Потужність: 0,18 кВт.'.PHP_EOL;
         $message .= 'Вага: 38 кг.'.PHP_EOL;
-        $message .= 'Розміри: 428х386х1105 мм';
+        $message .= 'Розміри: 428х386х1105 мм'.PHP_EOL;
+        $message .= 'Вартість оренди 1500грн/міс';
 
         $dto = new MessageDTO($message, $senderId);
         $dto->setReplyMarkup($this->replyMarkup);

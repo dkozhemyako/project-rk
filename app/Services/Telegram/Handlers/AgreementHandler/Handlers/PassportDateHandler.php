@@ -32,7 +32,7 @@ class PassportDateHandler implements AgreementInterface
             );
             Redis::set($agreementDTO->getSenderId(), 201);
 
-            $agreementDTO->setMessage('💬 Вкажіть Ваш ІПН, повинно бути 9 цифр.');
+            $agreementDTO->setMessage('💬 Вкажіть Ваш ІПН, повинно бути 10 цифр.');
             $agreementDTO->setReplyMarkup($this->replyMarkup());
             return $agreementDTO;
 
@@ -100,7 +100,7 @@ class PassportDateHandler implements AgreementInterface
 
         Redis::set($key, $agreementDTO->getMessage(), 'EX', 260000);
         Redis::set($agreementDTO->getSenderId(), 201);
-        $agreementDTO->setMessage('💬 Вкажіть Ваш ІПН, повинно бути 9 цифр.');
+        $agreementDTO->setMessage('💬 Вкажіть Ваш ІПН, повинно бути 10 цифр.');
         $agreementDTO->setReplyMarkup($this->replyMarkup());
         return $agreementDTO;
     }

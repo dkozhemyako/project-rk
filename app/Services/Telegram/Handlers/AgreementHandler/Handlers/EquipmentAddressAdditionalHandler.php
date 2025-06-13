@@ -40,17 +40,19 @@ class EquipmentAddressAdditionalHandler implements AgreementInterface
 
         Redis::set($key, $agreementDTO->getMessage(), 'EX', 260000);
         $agreementDTO->setMessage(
-            '💬 Дякуємо за надану інформацію , договір передано орендодавцю для перевірки та заповнення даних про обладнання.'.PHP_EOL.
-            'Невдовзі ми відправимо Вам заповнений та підписаний договір оренди для ознайомлення та підписання за допомогою "Дія підпису".'
+            '💬 Дякуємо за надану інформацію , дані передано орендодавцю.'.PHP_EOL.
+            'Невдовзі ми відправимо Вам договір для перевірки.'
         );
         $agreementDTO->setReplyMarkup($this->replyMarkup());
 
         if (Redis::exists($key) == true){
 
             $agreementDTO->getClientAgreementDTO()->setEquipRegion(Redis::get($agreementDTO->getSenderId(). EquipmentAddressRegionHandler::AGR_STAGE_EQUIP_REGION));
+            /*
             $agreementDTO->getClientAgreementDTO()->setEquipTown(Redis::get($agreementDTO->getSenderId(). EquipmentAddressTownHandler::AGR_STAGE_EQUIP_TOWN));
             $agreementDTO->getClientAgreementDTO()->setEquipStreet(Redis::get($agreementDTO->getSenderId(). EquipmentAddressStreetHandler::AGR_STAGE_EQUIP_STREET));
             $agreementDTO->getClientAgreementDTO()->setEquipHouse(Redis::get($agreementDTO->getSenderId(). EquipmentAddressHouseHandler::AGR_STAGE_EQUIP_HOUSE));
+            */
             $agreementDTO->getClientAgreementDTO()->setEquipAddressAdd(Redis::get($agreementDTO->getSenderId(). EquipmentAddressAdditionalHandler::AGR_STAGE_EQUIP_ADD));
 
         }

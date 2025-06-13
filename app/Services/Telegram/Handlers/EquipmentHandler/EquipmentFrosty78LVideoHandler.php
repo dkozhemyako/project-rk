@@ -27,10 +27,10 @@ class EquipmentFrosty78LVideoHandler implements CommandsInterface
                     ],
                     [ //строка
                         [ //кнопка
-                            'text' => '⬅ Повернутись назад',
+                            'text' => '⬆ На головну',
                         ],
                         [ //кнопка
-                            'text' => '⬆ На головну',
+                            'text' => '⬅ Повернутись назад',
                         ],
 
 

@@ -10,6 +10,15 @@ use Illuminate\Support\Facades\DB;
 
 class ClientAgreementRepository
 {
+
+    public function getLatestUnsignedAgreementIdByTelegramId(int $telegramId): ?int
+    {
+        return DB::table('client_agreements')
+            ->where('telegram_id', $telegramId)
+            ->whereNull('file_signed_agreement')
+            ->orderByDesc('created_at')
+            ->value('id');
+    }
     public function store(ClientAgreementDTO $dto): int
     {
         return DB::table('client_agreements')

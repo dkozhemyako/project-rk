@@ -1,0 +1,474 @@
+[
+    {
+        "key": "biztalk_1.header.delivery.message.messageID",
+        "value": "CXGJSSKIIWAYZ"
+    },
+    {
+        "key": "biztalk_1.header.delivery.message.sent",
+        "value": "230731"
+    },
+    {
+        "key": "biztalk_1.header.delivery.message.interchange",
+        "value": "CXGJSSKIIWAYZ"
+    },
+    {
+        "key": "biztalk_1.header.delivery.message.interchange_date",
+        "value": "2023-07-31"
+    },
+    {
+        "key": "biztalk_1.header.delivery.message.interchange_time",
+        "value": "13:08:00"
+    },
+    {
+        "key": "biztalk_1.header.delivery.to.state.ediid",
+        "value": "3855800001897"
+    },
+    {
+        "key": "biztalk_1.header.delivery.from.state.ediid",
+        "value": "3855600003008"
+    },
+    {
+        "key": "biztalk_1.header.manifest.document.name",
+        "value": "xml_document"
+    },
+    {
+        "key": "biztalk_1.header.manifest.document.userdocid",
+        "value": "300420251545"
+    },
+    {
+        "key": "biztalk_1.header.manifest.document.message_number",
+        "value": "CXGJP8YKT3897"
+    },
+    {
+        "key": "biztalk_1.body.xml_document.@version_number",
+        "value": "2010"
+    },
+    {
+        "key": "biztalk_1.body.xml_document.@type_identifier",
+        "value": "ORDERS"
+    },
+    {
+        "key": "biztalk_1.body.xml_document.form_header.userdocid",
+        "value": "300420251545"
+    },
+    {
+        "key": "biztalk_1.body.xml_document.form_header.document_type",
+        "value": "NORMAL_ORDER"
+    },
+    {
+        "key": "biztalk_1.body.xml_document.form_header.message_function",
+        "value": "9"
+    },
+    {
+        "key": "biztalk_1.body.xml_document.form_header.document_date",
+        "value": "2025-07-31"
+    },
+    {
+        "key": "biztalk_1.body.xml_document.form_header.document_date_format",
+        "value": "102"
+    },
+    {
+        "key": "biztalk_1.body.xml_document.form_header.delivery_date",
+        "value": "2025-08-02"
+    },
+    {
+        "key": "biztalk_1.body.xml_document.form_header.delivery_time",
+        "value": "18:00"
+    },
+    {
+        "key": "biztalk_1.body.xml_document.form_header.delivery_date_format",
+        "value": "203"
+    },
+    {
+        "key": "biztalk_1.body.xml_document.form_header.buyer.party_qualifier",
+        "value": "BY"
+    },
+    {
+        "key": "biztalk_1.body.xml_document.form_header.buyer.party_ean",
+        "value": "3855600003008"
+    },
+    {
+        "key": "biztalk_1.body.xml_document.form_header.supplier.party_qualifier",
+        "value": "SU"
+    },
+    {
+        "key": "biztalk_1.body.xml_document.form_header.supplier.party_ean",
+        "value": "3855800001897"
+    },
+    {
+        "key": "biztalk_1.body.xml_document.form_header.delivery_place.party_qualifier",
+        "value": "DP"
+    },
+    {
+        "key": "biztalk_1.body.xml_document.form_header.delivery_place.party_ean",
+        "value": "3855600003008"
+    },
+    {
+        "key": "biztalk_1.body.xml_document.form_header.invoicee.party_qualifier",
+        "value": "IV"
+    },
+    {
+        "key": "biztalk_1.body.xml_document.form_header.invoicee.party_ean",
+        "value": "3855600003008"
+    },
+    {
+        "key": "biztalk_1.body.xml_document.line_items.item[0].item_number",
+        "value": 1
+    },
+    {
+        "key": "biztalk_1.body.xml_document.line_items.item[0].article_ean",
+        "value": "3166296204984"
+    },
+    {
+        "key": "biztalk_1.body.xml_document.line_items.item[0].specification",
+        "value": "ZAČIN DUCROS PAPAR MJEŠA.26 g"
+    },
+    {
+        "key": "biztalk_1.body.xml_document.line_items.item[0].quantity",
+        "value": 42
+    },
+    {
+        "key": "biztalk_1.body.xml_document.line_items.item[0].unit",
+        "value": "PCE"
+    },
+    {
+        "key": "biztalk_1.body.xml_document.line_items.item[0].delivery_date",
+        "value": "2025-08-02"
+    },
+    {
+        "key": "biztalk_1.body.xml_document.line_items.item[0].delivery_time",
+        "value": "18:00"
+    },
+    {
+        "key": "biztalk_1.body.xml_document.line_items.item[0].delivery_date_format",
+        "value": "203"
+    },
+    {
+        "key": "biztalk_1.body.xml_document.line_items.item[0].best_before_date",
+        "value": "2025-05-11"
+    },
+    {
+        "key": "biztalk_1.body.xml_document.line_items.item[1].item_number",
+        "value": 2
+    },
+    {
+        "key": "biztalk_1.body.xml_document.line_items.item[1].article_ean",
+        "value": "3166291531801"
+    },
+    {
+        "key": "biztalk_1.body.xml_document.line_items.item[1].specification",
+        "value": "ZAČIN DUCROS TIMIJAN 14 g"
+    },
+    {
+        "key": "biztalk_1.body.xml_document.line_items.item[1].quantity",
+        "value": 12
+    },
+    {
+        "key": "biztalk_1.body.xml_document.line_items.item[1].unit",
+        "value": "PCE"
+    },
+    {
+        "key": "biztalk_1.body.xml_document.line_items.item[1].delivery_date",
+        "value": "2025-08-02"
+    },
+    {
+        "key": "biztalk_1.body.xml_document.line_items.item[1].delivery_time",
+        "value": "18:00"
+    },
+    {
+        "key": "biztalk_1.body.xml_document.line_items.item[1].delivery_date_format",
+        "value": "203"
+    },
+    {
+        "key": "biztalk_1.body.xml_document.line_items.item[1].best_before_date",
+        "value": "2025-05-06"
+    },
+    {
+        "key": "biztalk_1.body.xml_document.line_items.item[2].item_number",
+        "value": 3
+    },
+    {
+        "key": "biztalk_1.body.xml_document.line_items.item[2].article_ean",
+        "value": "3166296203109"
+    },
+    {
+        "key": "biztalk_1.body.xml_document.line_items.item[2].specification",
+        "value": "ZAČIN DUCROS ORIGANO 10 g"
+    },
+    {
+        "key": "biztalk_1.body.xml_document.line_items.item[2].quantity",
+        "value": 24
+    },
+    {
+        "key": "biztalk_1.body.xml_document.line_items.item[2].unit",
+        "value": "PCE"
+    },
+    {
+        "key": "biztalk_1.body.xml_document.line_items.item[2].delivery_date",
+        "value": "2025-08-02"
+    },
+    {
+        "key": "biztalk_1.body.xml_document.line_items.item[2].delivery_time",
+        "value": "18:00"
+    },
+    {
+        "key": "biztalk_1.body.xml_document.line_items.item[2].delivery_date_format",
+        "value": "203"
+    },
+    {
+        "key": "biztalk_1.body.xml_document.line_items.item[2].best_before_date",
+        "value": "2025-05-11"
+    },
+    {
+        "key": "biztalk_1.body.xml_document.line_items.item[3].item_number",
+        "value": 4
+    },
+    {
+        "key": "biztalk_1.body.xml_document.line_items.item[3].article_ean",
+        "value": "3166296555321"
+    },
+    {
+        "key": "biztalk_1.body.xml_document.line_items.item[3].specification",
+        "value": "ZAČIN DUCROS KIM MLJEVENI 40 g"
+    },
+    {
+        "key": "biztalk_1.body.xml_document.line_items.item[3].quantity",
+        "value": 48
+    },
+    {
+        "key": "biztalk_1.body.xml_document.line_items.item[3].unit",
+        "value": "PCE"
+    },
+    {
+        "key": "biztalk_1.body.xml_document.line_items.item[3].delivery_date",
+        "value": "2025-08-02"
+    },
+    {
+        "key": "biztalk_1.body.xml_document.line_items.item[3].delivery_time",
+        "value": "18:00"
+    },
+    {
+        "key": "biztalk_1.body.xml_document.line_items.item[3].delivery_date_format",
+        "value": "203"
+    },
+    {
+        "key": "biztalk_1.body.xml_document.line_items.item[3].best_before_date",
+        "value": "2025-05-11"
+    },
+    {
+        "key": "biztalk_1.body.xml_document.line_items.item[4].item_number",
+        "value": 5
+    },
+    {
+        "key": "biztalk_1.body.xml_document.line_items.item[4].article_ean",
+        "value": "3166296203093"
+    },
+    {
+        "key": "biztalk_1.body.xml_document.line_items.item[4].specification",
+        "value": "ZAČIN DUCROS BOSILJAK 12 g"
+    },
+    {
+        "key": "biztalk_1.body.xml_document.line_items.item[4].quantity",
+        "value": 18
+    },
+    {
+        "key": "biztalk_1.body.xml_document.line_items.item[4].unit",
+        "value": "PCE"
+    },
+    {
+        "key": "biztalk_1.body.xml_document.line_items.item[4].delivery_date",
+        "value": "2025-08-02"
+    },
+    {
+        "key": "biztalk_1.body.xml_document.line_items.item[4].delivery_time",
+        "value": "18:00"
+    },
+    {
+        "key": "biztalk_1.body.xml_document.line_items.item[4].delivery_date_format",
+        "value": "203"
+    },
+    {
+        "key": "biztalk_1.body.xml_document.line_items.item[4].best_before_date",
+        "value": "2025-05-06"
+    },
+    {
+        "key": "biztalk_1.body.xml_document.line_items.item[5].item_number",
+        "value": 6
+    },
+    {
+        "key": "biztalk_1.body.xml_document.line_items.item[5].article_ean",
+        "value": "3166296204236"
+    },
+    {
+        "key": "biztalk_1.body.xml_document.line_items.item[5].specification",
+        "value": "ZAČIN DUCROS CURRY 42 g"
+    },
+    {
+        "key": "biztalk_1.body.xml_document.line_items.item[5].quantity",
+        "value": 6
+    },
+    {
+        "key": "biztalk_1.body.xml_document.line_items.item[5].unit",
+        "value": "PCE"
+    },
+    {
+        "key": "biztalk_1.body.xml_document.line_items.item[5].delivery_date",
+        "value": "2025-08-02"
+    },
+    {
+        "key": "biztalk_1.body.xml_document.line_items.item[5].delivery_time",
+        "value": "18:00"
+    },
+    {
+        "key": "biztalk_1.body.xml_document.line_items.item[5].delivery_date_format",
+        "value": "203"
+    },
+    {
+        "key": "biztalk_1.body.xml_document.line_items.item[5].best_before_date",
+        "value": "2025-05-11"
+    },
+    {
+        "key": "biztalk_1.body.xml_document.line_items.item[6].item_number",
+        "value": 7
+    },
+    {
+        "key": "biztalk_1.body.xml_document.line_items.item[6].article_ean",
+        "value": "3166290200852"
+    },
+    {
+        "key": "biztalk_1.body.xml_document.line_items.item[6].specification",
+        "value": "ZAČIN DUCROS CHILI 38 g"
+    },
+    {
+        "key": "biztalk_1.body.xml_document.line_items.item[6].quantity",
+        "value": 24
+    },
+    {
+        "key": "biztalk_1.body.xml_document.line_items.item[6].unit",
+        "value": "PCE"
+    },
+    {
+        "key": "biztalk_1.body.xml_document.line_items.item[6].delivery_date",
+        "value": "2025-08-02"
+    },
+    {
+        "key": "biztalk_1.body.xml_document.line_items.item[6].delivery_time",
+        "value": "18:00"
+    },
+    {
+        "key": "biztalk_1.body.xml_document.line_items.item[6].delivery_date_format",
+        "value": "203"
+    },
+    {
+        "key": "biztalk_1.body.xml_document.line_items.item[6].best_before_date",
+        "value": "2025-05-11"
+    },
+    {
+        "key": "biztalk_1.body.xml_document.line_items.item[7].item_number",
+        "value": 8
+    },
+    {
+        "key": "biztalk_1.body.xml_document.line_items.item[7].article_ean",
+        "value": "3166291461900"
+    },
+    {
+        "key": "biztalk_1.body.xml_document.line_items.item[7].specification",
+        "value": "ZAČIN DUCROS PAPAR ROZI 20 g"
+    },
+    {
+        "key": "biztalk_1.body.xml_document.line_items.item[7].quantity",
+        "value": 36
+    },
+    {
+        "key": "biztalk_1.body.xml_document.line_items.item[7].unit",
+        "value": "PCE"
+    },
+    {
+        "key": "biztalk_1.body.xml_document.line_items.item[7].delivery_date",
+        "value": "2025-08-02"
+    },
+    {
+        "key": "biztalk_1.body.xml_document.line_items.item[7].delivery_time",
+        "value": "18:00"
+    },
+    {
+        "key": "biztalk_1.body.xml_document.line_items.item[7].delivery_date_format",
+        "value": "203"
+    },
+    {
+        "key": "biztalk_1.body.xml_document.line_items.item[7].best_before_date",
+        "value": "2025-05-11"
+    },
+    {
+        "key": "biztalk_1.body.xml_document.line_items.item[8].item_number",
+        "value": 9
+    },
+    {
+        "key": "biztalk_1.body.xml_document.line_items.item[8].article_ean",
+        "value": "3166290200081"
+    },
+    {
+        "key": "biztalk_1.body.xml_document.line_items.item[8].specification",
+        "value": "ZAČIN DUCROS ČEŠNJAK 60 g"
+    },
+    {
+        "key": "biztalk_1.body.xml_document.line_items.item[8].quantity",
+        "value": 36
+    },
+    {
+        "key": "biztalk_1.body.xml_document.line_items.item[8].unit",
+        "value": "PCE"
+    },
+    {
+        "key": "biztalk_1.body.xml_document.line_items.item[8].delivery_date",
+        "value": "2025-08-02"
+    },
+    {
+        "key": "biztalk_1.body.xml_document.line_items.item[8].delivery_time",
+        "value": "18:00"
+    },
+    {
+        "key": "biztalk_1.body.xml_document.line_items.item[8].delivery_date_format",
+        "value": "203"
+    },
+    {
+        "key": "biztalk_1.body.xml_document.line_items.item[8].best_before_date",
+        "value": "2025-05-11"
+    },
+    {
+        "key": "biztalk_1.body.xml_document.line_items.item[9].item_number",
+        "value": 10
+    },
+    {
+        "key": "biztalk_1.body.xml_document.line_items.item[9].article_ean",
+        "value": "3166291474207"
+    },
+    {
+        "key": "biztalk_1.body.xml_document.line_items.item[9].specification",
+        "value": "ZAČIN DUCROS CURCUMA 37 g"
+    },
+    {
+        "key": "biztalk_1.body.xml_document.line_items.item[9].quantity",
+        "value": 6
+    },
+    {
+        "key": "biztalk_1.body.xml_document.line_items.item[9].unit",
+        "value": "PCE"
+    },
+    {
+        "key": "biztalk_1.body.xml_document.line_items.item[9].delivery_date",
+        "value": "2025-08-02"
+    },
+    {
+        "key": "biztalk_1.body.xml_document.line_items.item[9].delivery_time",
+        "value": "18:00"
+    },
+    {
+        "key": "biztalk_1.body.xml_document.line_items.item[9].delivery_date_format",
+        "value": "203"
+    },
+    {
+        "key": "biztalk_1.body.xml_document.line_items.item[9].best_before_date",
+        "value": "2025-12-24"
+    }
+]
