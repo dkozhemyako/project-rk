@@ -52,7 +52,7 @@ class CheckFopSaveFileEdrHandler implements AgreementInterface
             Redis::set($agreementDTO->getSenderId(), 3);
 
             $agreementDTO->setMessage(
-                'Завантажте фото договору оренди або права власності або талон на МАФ. 📎'
+                'Завантажте фото договору оренди або права власності приміщення або талон на МАФ. 📎'
             );
             $agreementDTO->setReplyMarkup($this->replyMarkup(true));
             Redis::del($agreementDTO->getSenderId() . FopSaveFileEdrHandler::MEDIA_FILE_FOP_EDR);

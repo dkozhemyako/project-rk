@@ -35,9 +35,8 @@ class StoreClientAgreementHandler implements AgreementInterface
                 '🔥 Запит формування договору, завдання #'.$agreementId.PHP_EOL.
                 $agreementDTO->getClientAgreementDTO()->getName().PHP_EOL.
                 '+380'.$agreementDTO->getClientAgreementDTO()->getPhone().PHP_EOL.
-                'Область розміщення: '.$agreementDTO->getClientAgreementDTO()->getEquipRegion().PHP_EOL.
-                'Місто розміщення: '.$agreementDTO->getClientAgreementDTO()->getEquipTown().PHP_EOL.
-                'Адреса розміщення: '.$agreementDTO->getClientAgreementDTO()->getEquipStreet().', '.$agreementDTO->getClientAgreementDTO()->getEquipHouse() .PHP_EOL.
+                'Адреса розміщення: '.$agreementDTO->getClientAgreementDTO()->getEquipRegion().PHP_EOL.
+                'Адреса прописки: '.$agreementDTO->getClientAgreementDTO()->getClientRegion().PHP_EOL.
                 'Дата встановлення: '.$agreementDTO->getClientAgreementDTO()->getDateFromClient().PHP_EOL.
                 'Комплект: ' . $agreementDTO->getClientAgreementDTO()->getEqType()->value;
 

@@ -27,10 +27,10 @@ class EquipmentFrosty78LCharacteristicsHandler implements CommandsInterface
                     ],
                     [ //строка
                         [ //кнопка
-                            'text' => '⬅ Повернутись назад',
+                            'text' => '⬆ На головну',
                         ],
                         [ //кнопка
-                            'text' => '⬆ На головну',
+                            'text' => '⬅ Повернутись назад',
                         ],
 
 
@@ -52,7 +52,8 @@ class EquipmentFrosty78LCharacteristicsHandler implements CommandsInterface
         $message .= 'Параметри: 428х386х960'.PHP_EOL;
         $message .= 'Температурний режим,°C: 0...+12'.PHP_EOL;
         $message .= 'Тип товару: вітрина холодильна'.PHP_EOL;
-        $message .= 'Тип установки: настільна';
+        $message .= 'Тип установки: настільна'.PHP_EOL;
+        $message .= 'Вартість оренди 1300грн/міс';
 
         $dto = new MessageDTO($message, $senderId);
         $dto->setReplyMarkup($this->replyMarkup);

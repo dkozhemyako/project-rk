@@ -25,7 +25,6 @@ class FilesSaveAgreementHandler implements FinalAgreementInterface
         protected AdminAgreementRepository $adminAgreementRepository,
         protected ClientAgreementRepository $clientAgreementRepository,
         protected TelegramMessengerService $messengerService,
-        protected GDriveSendDocumentService $driveSendDocumentService,
     ){}
 
 
@@ -39,25 +38,12 @@ class FilesSaveAgreementHandler implements FinalAgreementInterface
         $path .= $files1stPartData->getEquipTown(). ' ' . $files1stPartData->getEquipStreet() . ' ' . $files1stPartData->getEquipHouse(). '/';
         $path .= $files2ndPartData->getEquipmentModel();
 
-        $pathArray = [
-            $files1stPartData->getName(). ' ' . $files1stPartData->getPhone(),
-            $files1stPartData->getEquipTown(). ' ' . $files1stPartData->getEquipStreet(),
-            $files2ndPartData->getEquipmentModel(),
-        ];
-
-        $parent = Redis::get($finalAgreementDTO->getSenderId() . ClientCheckAgreementTrueHandler::GD_PARENT_FILES);
 
         $files = [
             $files1stPartData->getFileSignedAgreement(),
             $files2ndPartData->getFileSignedAgreement(),
         ];
 
-        foreach ($files as $value){
-            if ($value != null){
-                $this->driveSendDocumentService->handle($value, $parent);
-
-            }
-        }
 
         foreach ($files as $value){
             if ($value != null){

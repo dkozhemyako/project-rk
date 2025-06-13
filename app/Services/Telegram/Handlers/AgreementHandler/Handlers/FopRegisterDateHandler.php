@@ -31,7 +31,7 @@ class FopRegisterDateHandler implements AgreementInterface
             );
             Redis::set($agreementDTO->getSenderId(), 9);
 
-            $agreementDTO->setMessage('💬 Вкажіть Ваш ІПН.');
+            $agreementDTO->setMessage('💬 Вкажіть Ваш ІПН, повинно бути 10 цифр.');
             $agreementDTO->setReplyMarkup($this->replyMarkup());
             return $agreementDTO;
         }
@@ -71,7 +71,7 @@ class FopRegisterDateHandler implements AgreementInterface
             return $agreementDTO;
         }
 
-        if (mb_strlen($arrayDate[0]) > 2 || mb_strlen($arrayDate[1]) > 2 || mb_strlen($arrayDate[2]) > 4){
+        if (mb_strlen($arrayDate[0]) > 2 || mb_strlen($arrayDate[1]) > 2 || mb_strlen($arrayDate[2]) != 4 ){
             $agreementDTO->setMessage(
                 '🤦 Дата вказана з помилками, перевірте чи нема зайвих символів або їх недостатньо. Будь ласка вкажіть дату повторно у форматі ДД.ММ.РРРР (наприклад 31.12.2024)'
             );

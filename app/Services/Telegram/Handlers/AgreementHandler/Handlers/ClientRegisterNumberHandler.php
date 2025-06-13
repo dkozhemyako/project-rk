@@ -28,7 +28,7 @@ class ClientRegisterNumberHandler implements AgreementInterface
             Redis::set($agreementDTO->getSenderId(), 10);
 
             $agreementDTO->setMessage(
-                '💬 Вкажіть назву області вашої прописки.'
+                '💬 Вкажіть адресу вашої прописки. Наприклад: Київська обл., м.Київ, вул.Перемоги, б.32, кв. 12'
             );
             $agreementDTO->setReplyMarkup($this->replyMarkup());
             return $agreementDTO;
@@ -68,7 +68,7 @@ class ClientRegisterNumberHandler implements AgreementInterface
         Redis::set($key, $agreementDTO->getMessage(), 'EX', 260000);
         Redis::set($agreementDTO->getSenderId(), 10);
         $agreementDTO->setMessage(
-            '💬 Вкажіть назву області вашої прописки.'
+            '💬 Вкажіть адресу вашої прописки. Наприклад: Київська обл., м.Київ, вул.Перемоги, б.32, кв. 12'
         );
         $agreementDTO->setReplyMarkup($this->replyMarkup());
         return $agreementDTO;

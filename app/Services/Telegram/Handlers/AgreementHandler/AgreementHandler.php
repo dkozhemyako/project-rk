@@ -74,15 +74,15 @@ class AgreementHandler implements CommandsInterface
         ClientRegisterNumberHandler::class,
         //
         ClientAddressRegionHandler::class,
-        ClientAddressTownHandler::class,
-        ClientAddressStreetHandler::class,
-        ClientAddressHouseHandler::class,
-        ClientAddressFlatHandler::class,
+        //ClientAddressTownHandler::class,
+        //ClientAddressStreetHandler::class,
+        //ClientAddressHouseHandler::class,
+        //ClientAddressFlatHandler::class,
         //
         EquipmentAddressRegionHandler::class,
-        EquipmentAddressTownHandler::class,
-        EquipmentAddressStreetHandler::class,
-        EquipmentAddressHouseHandler::class,
+        //EquipmentAddressTownHandler::class,
+        //EquipmentAddressStreetHandler::class,
+        //EquipmentAddressHouseHandler::class,
         EquipmentAddressAdditionalHandler::class,
         //
         CreateAgreementDraftHandler::class,

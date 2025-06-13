@@ -2,8 +2,6 @@
 
 namespace App\Services\Telegram\Handlers\ClientAgreementHandler\Handlers;
 
-
-
 use App\Enums\TelegramCommandEnum;
 use App\Repositories\AdminAgreement\AdminAgreementRepository;
 use App\Repositories\ClientAgreement\ClientAgreementRepository;
@@ -23,49 +21,86 @@ class GetSignetAgreementHandler implements FinalAgreementInterface
         protected TelegramMessengerService $messengerService,
     ){}
 
-
     public function handle(FinalAgreementDTO $finalAgreementDTO , Closure $next): FinalAgreementDTO
     {
-        if ($finalAgreementDTO->getFileName() === ''){
+        if ($finalAgreementDTO->getFileName() === '') {
             $finalAgreementDTO->setMessage(
                 '🤦 Ви не завантажили жодного документу, повторіть спробу'
             );
             return $finalAgreementDTO;
         }
 
-        $zip = explode('.',$finalAgreementDTO->getFileName());
+        // 1. Отримуємо ім’я файлу
+        $fileName = $finalAgreementDTO->getFileName();
+        Log::info('Отримано ім’я файлу:', ['fileName' => $fileName]);
 
-        if (trim(end($zip)) != 'p7s'){
+        // 2. Отримуємо інформацію про клієнта
+        $clientInfo = $this->clientAgreementRepository->getClientFilesById($finalAgreementDTO->getCallback());
+        $clientName = $clientInfo->getName();
+        Log::info('Отримано ім’я клієнта:', ['clientName' => $clientName]);
+
+        // 3. Розділяємо ім’я файлу по крапках
+        $parts = explode('.', $fileName);
+        Log::info('Частини імені файлу після explode:', ['parts' => $parts]);
+
+        // 4. Визначаємо розширення
+        if (count($parts) > 1) {
+            array_shift($parts); // видаляємо першу частину
+            $extension = strtolower('.' . implode('.', $parts)); // додаємо strtolower
+            Log::info('Сформоване складене розширення:', ['extension' => $extension]);
+        } else {
+            $extension = '';
+            Log::info('Файл не має розширення.');
+        }
+
+        // 🔒 Перевірка дозволених розширень
+        $allowedExtensions = ['.p7s', '.asics'];
+        if (!in_array($extension, $allowedExtensions)) {
             $finalAgreementDTO->setMessage(
-                '🤦 Помилка відправки файлу. Необхідно завантажити файл з підписом, розширення .p7s'
+                '❗️Невірне розширення файлу. Дозволено лише файли з розширенням .p7s або .asics. Ви завантажили: ' . $extension
             );
             return $finalAgreementDTO;
         }
 
-        $clientInfo = $this->clientAgreementRepository->getClientFilesById($finalAgreementDTO->getCallback());
+        // 5. Формуємо нове ім’я файлу
+        $newFileName = 'cli_signed_' . $clientName . $extension;
+        Log::info('Сформоване нове ім’я файлу:', ['newFileName' => $newFileName]);
 
-        $newFileName = 'cli_signed_' . $clientInfo->getName() . '.docx.p7s';
-        Storage::disk('public')->move($finalAgreementDTO->getFileName(), $newFileName);
+        // 6. Перевіряємо, чи існує файл
+        if (Storage::disk('public')->exists($fileName)) {
+            Log::info('Файл існує. Виконується перейменування...');
+            Storage::disk('public')->move($fileName, $newFileName);
+            Log::info('Файл успішно перейменовано.', [
+                'old' => $fileName,
+                'new' => $newFileName
+            ]);
+        } else {
+            Log::error('Файл не знайдено для перейменування:', ['fileName' => $fileName]);
+        }
 
+        // 7. Оновлюємо файл у базі
         $this->clientAgreementRepository->updateSignedAgreement($finalAgreementDTO->getCallback(), $newFileName);
 
-        $message = '💬 Вітаю, надсилаємо вам підписаний договір орендарем..'.PHP_EOL.PHP_EOL;
-        $message .= 'Завдання №'.$finalAgreementDTO->getCallback().'('.$clientInfo->getName().')'.PHP_EOL;
-        $message .= 'Перевірити підпис на отриманому файлі - https://ca.diia.gov.ua/verify'.PHP_EOL;
-        $message .= 'Всі файли клієнта збережені у відповідну теку.'.PHP_EOL;
+        // 8. Надсилаємо повідомлення адміну
+        $message = '💬 Вітаю, надсилаємо вам підписаний договір орендарем..' . PHP_EOL . PHP_EOL;
+        $message .= 'Завдання №' . $finalAgreementDTO->getCallback() . ' (' . $clientInfo->getName() . ')' . PHP_EOL;
+        $message .= 'Перевірити підпис на отриманому файлі - https://ca.diia.gov.ua/verify' . PHP_EOL;
+        $message .= 'Підпишіть та відправте договір клієнту.' . PHP_EOL;
 
         $dto = new MessageDTO(
             $message,
             config('messenger.telegram.admin_id'),
         );
+        $dto->setReplyMarkup($this->getAdminReplyMarkup($finalAgreementDTO->getCallback()));
         $this->messengerService->send($dto);
 
+        // 9. Надсилаємо сам файл через curl
         $arrayQuery = array(
             'chat_id' => config('messenger.telegram.admin_id'),
             'caption' => 'Підписаний договір клієнтом',
-            'document' => curl_file_create(storage_path('app/public/'.$newFileName))
+            'document' => curl_file_create(storage_path('app/public/' . $newFileName))
         );
-        $ch = curl_init('https://api.telegram.org/bot'. config('messenger.telegram.token') .'/sendDocument');
+        $ch = curl_init('https://api.telegram.org/bot' . config('messenger.telegram.token') . '/sendDocument');
         curl_setopt($ch, CURLOPT_POST, 1);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $arrayQuery);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -73,28 +108,41 @@ class GetSignetAgreementHandler implements FinalAgreementInterface
         curl_exec($ch);
         curl_close($ch);
 
-        $finalAgreementDTO->setMessage('💬 Дякуємо, договір відправлено орендодавцю. Чекайте на дзвінок по вказаному контактному номеру');
+        // 10. Завершення обробки
+        $finalAgreementDTO->setMessage('💬 Дякуємо, договір відправлено орендодавцю. Чекайте на дзвінок по вказаному контактному номеру, а також підписаний договір.');
         $finalAgreementDTO->setReplyMarkup($this->replyMarkup());
 
         return $next($finalAgreementDTO);
-
-
     }
 
     private function replyMarkup(): array
     {
-        return
-            [
-                'keyboard' =>
+        return [
+            'keyboard' => [
+                [
                     [
-                        [ //строка
-                            [ //кнопка
-                                'text' => TelegramCommandEnum::returnMain->value,
-                            ],
-                        ],
+                        'text' => TelegramCommandEnum::returnMain->value,
                     ],
-                'one_time_keyboard' => true,
-                'resize_keyboard' => true,
-            ];
+                ],
+            ],
+            'one_time_keyboard' => true,
+            'resize_keyboard' => true,
+        ];
+    }
+
+    private function getAdminReplyMarkup(int $agreementId): array
+    {
+        return [
+            'inline_keyboard' => [
+                [
+                    [
+                        'text' => TelegramCommandEnum::adminSignedAgreement->value,
+                        'callback_data' => $agreementId,
+                    ],
+                ],
+            ],
+            'one_time_keyboard' => true,
+            'resize_keyboard' => true,
+        ];
     }
 }
