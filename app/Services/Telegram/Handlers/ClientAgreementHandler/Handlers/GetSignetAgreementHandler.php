@@ -54,10 +54,10 @@ class GetSignetAgreementHandler implements FinalAgreementInterface
         }
 
         // 🔒 Перевірка дозволених розширень
-        $allowedExtensions = ['.p7s', '.asics'];
+        $allowedExtensions = ['.p7s', '.asics', '.asice'];
         if (!in_array($extension, $allowedExtensions)) {
             $finalAgreementDTO->setMessage(
-                '❗️Невірне розширення файлу. Дозволено лише файли з розширенням .p7s або .asics. Ви завантажили: ' . $extension
+                '❗️Невірне розширення файлу. Дозволено лише файли з розширенням .p7s або .asics або .asice. Ви завантажили: ' . $extension
             );
             return $finalAgreementDTO;
         }
