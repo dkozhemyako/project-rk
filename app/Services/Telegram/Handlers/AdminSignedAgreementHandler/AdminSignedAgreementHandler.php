@@ -56,10 +56,10 @@ class AdminSignedAgreementHandler implements CommandsInterface
         }
 
         // 🔒 Перевірка розширення
-        $allowedExtensions = ['.p7s', '.asics'];
+        $allowedExtensions = ['.p7s', '.asics', '.asice', '.p7s.p7s'];
         if (!in_array($extension, $allowedExtensions)) {
             return new MessageDTO(
-                '❗️Невірне розширення файлу. Дозволено лише файли з розширенням .p7s або .asics. Ви завантажили: ' . $extension,
+                '❗️Невірне розширення файлу. Дозволено лише файли з розширенням .p7s або .asics або .asice. Ви завантажили: ' . $extension,
                 $dto->getSenderId()
             );
         }
