@@ -86,13 +86,13 @@ class AdminAgreementEquipmentModelHandler implements AdminAgreementInterface
 
         if($adminAgreementDTO->getMessage() == "Gooder XC68L" || $adminAgreementDTO->getMessage() == "Reednee RT78L" || $adminAgreementDTO->getMessage() == "Frosty RT78L" || $adminAgreementDTO->getMessage() == "Frosty RT98L" || $adminAgreementDTO->getMessage() == "Reednee RT98L"){
             $adminAgreementDTO->setMessage(
-                "Холодильна вітрина, настільна, вертикальна, " . $adminAgreementDTO->getMessage() . " чорного кольору, СН:44957885"
+                "Холодильна вітрина, настільна, вертикальна, " . $adminAgreementDTO->getMessage() . " чорного кольору, СН:7777"
             );
         }
 
         if($adminAgreementDTO->getMessage() == "Gooder XCW100L" || $adminAgreementDTO->getMessage() == "Gooder XCW120LS" || $adminAgreementDTO->getMessage() == "Gooder XCW120 CUBE" || $adminAgreementDTO->getMessage() == "Gooder XCW160LS" || $adminAgreementDTO->getMessage() == "Gooder XCW160 CUBE"){
             $adminAgreementDTO->setMessage(
-                "Холодильна вітрина, горизонтальна, настільна, " . $adminAgreementDTO->getMessage() . " чорного кольору,  СН:8884857"
+                "Холодильна вітрина, горизонтальна, настільна, " . $adminAgreementDTO->getMessage() . " чорного кольору,  СН:7777"
             );
         }
 
