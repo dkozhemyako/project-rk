@@ -44,7 +44,12 @@ class FopSaveFileEdrHandler implements AgreementInterface
 
         }
 
-        Redis::set($key, json_encode(['0' => $agreementDTO->getFileName()]), 'EX', 260000);
+        Redis::set(
+            $key,
+            json_encode([$agreementDTO->getFileName()], JSON_UNESCAPED_UNICODE),
+            'EX',
+            260000
+        );
         Redis::set($agreementDTO->getSenderId(), 3);
 
         $agreementDTO->setMessage(
