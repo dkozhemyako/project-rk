@@ -43,7 +43,15 @@ class FopSaveFileAgrHandler implements AgreementInterface
             return $agreementDTO;
         }
 
-        Redis::set($key, json_encode(['0' => $agreementDTO->getFileName()]), 'EX', 260000);
+        Redis::set(
+            $key,
+            json_encode(
+                [$agreementDTO->getFileName()],
+                JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES
+            ),
+            'EX',
+            260000
+        );
 
         $agreementDTO->setMessage(
             'Бажаєте завантажити додаткові фото договору оренди або права власності приміщення або талон на МАФ? 📎'
